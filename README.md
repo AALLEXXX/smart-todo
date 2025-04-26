@@ -73,11 +73,11 @@ Run PyInstaller with icon, data folders, and windowed mode:
 ```bash
 pyinstaller \
   --name "AlexTodo" \
-  --icon "icons/app_icns.icns" \
-  --add-data "styles:styles" \
-  --add-data "ui:ui" \
-  --add-data "user_config.ini:." \
-  --add-data "data/todo.db:data" \
+  --icon "app/icons/app_icns.icns" \
+  --add-data "app/styles:styles" \
+  --add-data "app/ui:ui" \
+  --add-data "app/user_config.ini:." \
+  --add-data "app/data/todo.db:data" \
   --windowed main.py
 ```  
 
