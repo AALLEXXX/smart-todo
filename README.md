@@ -22,18 +22,28 @@ A simple and elegant **To-Do** desktop application built with **PyQt6**. Organiz
 
 ---
 
-## Installation & Setup
+## Development Setup
 
-Use the provided `Makefile` to simplify setup and common tasks.
+Use the provided `Makefile` to set up the development environment and git hooks:
 
 ```bash
-make install     # install dependencies via Poetry
-make compile-ui  # compile Qt .ui files into Python modules
-make init-db     # create and initialize the SQLite database
-make run         # launch the application
-make build       # package the app into a standalone executable with PyInstaller
-make clean       # remove build artifacts and temporary files
+make install-dev   # install runtime + dev dependencies and activate pre-commit hooks
 ```
+
+---
+
+## Makefile Reference
+
+| Target           | Description                                                                 |
+| ---------------- | --------------------------------------------------------------------------- |
+| `make install`   | Install runtime dependencies via Poetry                                      |
+| `make install-dev` | Install runtime and dev dependencies, and install pre-commit hooks         |
+| `make compile-ui` | Compile all `.ui` files into Python modules                                  |
+| `make init-db`    | Initialize the SQLite database                                               |
+| `make run`        | Run the application                                                           |
+| `make lint`       | Run Ruff linting and formatting checks                                        |
+| `make build`      | Build a standalone executable using PyInstaller                               |
+| `make clean`      | Remove build artifacts (`build/`, `dist/`, `*.spec`)                          |
 
 ---
 
@@ -48,13 +58,13 @@ Create `Todo.spec` in the project root with the following datas configuration:
 ```python
 # Todo.spec
 
-datas = [
-    ('styles', 'styles'),
-    ('ui', 'ui'),
-    ('user_config.ini', '.'),
-    ('data', 'data')
-]
-```  
+ datas = [
+     ('styles', 'styles'),
+     ('ui', 'ui'),
+     ('user_config.ini', '.'),
+     ('data', 'data')
+ ]
+```
 
 ### 2. PyInstaller Command
 
@@ -106,13 +116,19 @@ The built application will be in the `dist/AlexTodo` folder.
 
 ---
 
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for a detailed list of changes by version.
+
+---
+
 ## Contributing
 
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-name`).
-3. Commit your changes (`git commit -m 'Add feature'`).
-4. Push to the branch (`git push origin feature-name`).
-5. Open a pull request.
+1. Fork the repository.  
+2. Create a new branch (`git checkout -b feature-name`).  
+3. Run `make install-dev` and ensure `make lint` passes without errors.  
+4. Commit your changes and push to your branch (`git push origin feature-name`).  
+5. Open a pull request; pre-commit hooks will run automatically.
 
 ---
 

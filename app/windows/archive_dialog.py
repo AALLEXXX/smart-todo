@@ -1,10 +1,13 @@
 from PyQt6 import QtWidgets
 
-from components.task_card import TaskCard
-from db import get_archived_tasks, delete_task, update_task
-from ui.ui_ArchiveDialog import Ui_ArchiveDialog
-from windows.base_dialog import PersistentDialog
-from windows.task_dialog import TaskDetailDialog, TaskDialog
+from app.components.task_card import TaskCard
+from app.db import delete_task
+from app.db import get_archived_tasks
+from app.db import update_task
+from app.ui.ui_ArchiveDialog import Ui_ArchiveDialog
+from app.windows.base_dialog import PersistentDialog
+from app.windows.task_dialog import TaskDetailDialog
+from app.windows.task_dialog import TaskDialog
 
 
 class ArchiveDialog(PersistentDialog):
@@ -38,10 +41,13 @@ class ArchiveDialog(PersistentDialog):
             self.clear_layout(layout)
         # Добавляем карточки заново
         for task in get_archived_tasks():
-            card = TaskCard(task, theme=self.parent().current_theme,
-                            on_view=lambda t: TaskDetailDialog(t, self).exec(),
-                            on_delete=self.confirm_delete,
-                            on_edit=self.edit_task)
+            card = TaskCard(
+                task,
+                theme=self.parent().current_theme,
+                on_view=lambda t: TaskDetailDialog(t, self).exec(),
+                on_delete=self.confirm_delete,
+                on_edit=self.edit_task,
+            )
             layout.addWidget(card)
         layout.addStretch()
         layout.update()
@@ -51,7 +57,7 @@ class ArchiveDialog(PersistentDialog):
             self,
             "Confirm Delete",
             f"Are you sure you want to delete '{task[1]}'?",
-            QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No
+            QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No,
         )
         if confirm == QtWidgets.QMessageBox.StandardButton.Yes:
             delete_task(task[0])

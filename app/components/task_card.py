@@ -1,12 +1,13 @@
-from PyQt6 import QtWidgets, QtGui, QtCore
+from PyQt6 import QtCore
+from PyQt6 import QtGui
+from PyQt6 import QtWidgets
 
-import config
-from utils import format_deadline
+from app import config
+from app.utils import format_deadline
 
 
 class TaskCard(QtWidgets.QFrame):
-    def __init__(self, task, theme="light", parent=None,
-                 on_delete=None, on_archive=None, on_edit=None, on_view=None):
+    def __init__(self, task, theme="light", parent=None, on_delete=None, on_archive=None, on_edit=None, on_view=None):
         super().__init__(parent)
         self.task = task
         self.on_delete = on_delete

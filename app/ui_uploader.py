@@ -1,4 +1,5 @@
 import os
+
 from PyQt6.uic import compileUi
 
 UI_FOLDER = "ui"

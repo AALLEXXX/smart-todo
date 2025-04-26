@@ -1,10 +1,11 @@
-from datetime import datetime, date
+from datetime import date
+from datetime import datetime
 
 
 def format_deadline(deadline_str):
     """Возвращает строку для дедлайна:
-       - Сегодня, Завтра, Послезавтра для ближайших дат,
-       - иначе полная дата в формате dd MMM yyyy."""
+    - Сегодня, Завтра, Послезавтра для ближайших дат,
+    - иначе полная дата в формате dd MMM yyyy."""
     if not deadline_str:
         return "No deadline"
     try:

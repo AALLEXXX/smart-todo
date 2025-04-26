@@ -1,12 +1,19 @@
+import os
 import sys
-from PyQt6 import QtWidgets, QtCore
 
-from components.task_card import TaskCard
-from ui.ui_MainWindow import Ui_MainWindow
-from db import get_active_tasks, add_task, update_task, archive_task, delete_task
 import config
+from components.task_card import TaskCard
+from db import add_task
+from db import archive_task
+from db import delete_task
+from db import get_active_tasks
+from db import update_task
+from PyQt6 import QtCore
+from PyQt6 import QtWidgets
+from ui.ui_MainWindow import Ui_MainWindow
 from windows.archive_dialog import ArchiveDialog
-from windows.task_dialog import TaskDialog, TaskDetailDialog
+from windows.task_dialog import TaskDetailDialog
+from windows.task_dialog import TaskDialog
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -42,13 +49,13 @@ class MainWindow(QtWidgets.QMainWindow):
             "Backlog": self.ui.backlogList,
             "In Progress": self.ui.inProgressList,
             "Blocked": self.ui.blockedList,
-            "Done": self.ui.doneList
+            "Done": self.ui.doneList,
         }
         self.columnContainers = {
             "Backlog": self.ui.backlogContainer,
             "In Progress": self.ui.inProgressContainer,
             "Blocked": self.ui.blockedContainer,
-            "Done": self.ui.doneContainer
+            "Done": self.ui.doneContainer,
         }
         for status, container in self.columnContainers.items():
             container.setAcceptDrops(True)
@@ -70,6 +77,7 @@ class MainWindow(QtWidgets.QMainWindow):
         def dragEnterEvent(event):
             if event.mimeData().hasFormat("application/x-task-id"):
                 event.acceptProposedAction()
+
         return dragEnterEvent
 
     def create_dropEvent(self, target_status):
@@ -82,11 +90,11 @@ class MainWindow(QtWidgets.QMainWindow):
             update_task(task_id, status=target_status)
             self.load_tasks()
             event.acceptProposedAction()
+
         return dropEvent
 
     def apply_theme(self):
-        import sys, os
-        if getattr(sys, 'frozen', False):
+        if getattr(sys, "frozen", False):
             base_path = sys._MEIPASS
         else:
             base_path = os.path.dirname(os.path.abspath(__file__))
@@ -124,12 +132,14 @@ class MainWindow(QtWidgets.QMainWindow):
         for task in get_active_tasks():
             if task[3] not in selected_priorities:
                 continue
-            widget = TaskCard(task,
-                              theme=self.current_theme,
-                              on_delete=self.confirm_delete,
-                              on_archive=self.archive_task,
-                              on_edit=self.edit_task,
-                              on_view=lambda t: TaskDetailDialog(t, self).exec())
+            widget = TaskCard(
+                task,
+                theme=self.current_theme,
+                on_delete=self.confirm_delete,
+                on_archive=self.archive_task,
+                on_edit=self.edit_task,
+                on_view=lambda t: TaskDetailDialog(t, self).exec(),
+            )
             columns_tasks[task[4]].append(widget)
 
         for status, widgets in columns_tasks.items():
@@ -143,7 +153,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self,
             "Confirm Delete",
             f"Are you sure you want to delete '{task[1]}'?",
-            QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No
+            QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No,
         )
         if confirm == QtWidgets.QMessageBox.StandardButton.Yes:
             delete_task(task[0])
@@ -171,6 +181,7 @@ class MainWindow(QtWidgets.QMainWindow):
         dialog = ArchiveDialog(self)
         dialog.resize(config.ARCHIVE_WINDOW_WIDTH, config.ARCHIVE_WINDOW_HEIGHT)
         dialog.exec()
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

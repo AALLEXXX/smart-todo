@@ -1,8 +1,9 @@
-from PyQt6 import QtCore, QtWidgets
+from PyQt6 import QtCore
+from PyQt6 import QtWidgets
 
-from ui.ui_TaskDialog import Ui_TaskDialog
-from utils import format_deadline
-from windows.base_dialog import PersistentDialog
+from app.ui.ui_TaskDialog import Ui_TaskDialog
+from app.utils import format_deadline
+from app.windows.base_dialog import PersistentDialog
 
 
 class TaskDialog(PersistentDialog):

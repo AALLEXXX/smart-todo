@@ -1,10 +1,12 @@
-from PyQt6 import QtWidgets, QtCore
+from PyQt6 import QtCore
+from PyQt6 import QtWidgets
 
-import config
+from app import config
 
 
 class PersistentDialog(QtWidgets.QDialog):
     """Базовый класс для диалоговых окон с сохранением геометрии."""
+
     def __init__(self, geometry_key, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.geometry_key = geometry_key

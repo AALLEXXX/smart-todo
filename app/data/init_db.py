@@ -1,7 +1,8 @@
-import sqlite3
 import os
+import sqlite3
 
 DB_PATH = "todo.db"
+
 
 def init_db():
     if os.path.exists(DB_PATH):
@@ -30,6 +31,7 @@ def init_db():
     conn.commit()
     conn.close()
     print("База данных успешно создана.")
+
 
 if __name__ == "__main__":
     init_db()
