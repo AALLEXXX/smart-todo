@@ -9,7 +9,7 @@ APP_NAME = "Todo"
 ORGANIZATION = "MyCompany"
 
 # Темы оформления: пути к qss-файлам
-THEMES = {"light": os.path.join("styles", "style_light.qss"), "dark": os.path.join("styles", "style_dark.qss")}
+THEMES = {"light": os.path.join("app/styles", "style_light.qss"), "dark": os.path.join("app/styles", "style_dark.qss")}
 
 USER_CONFIG_PATH = os.path.join(BASE_DIR, "user_config.ini")
 

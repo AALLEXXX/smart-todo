@@ -83,31 +83,6 @@ pyinstaller \
 
 The built application will be in the `dist/AlexTodo` folder.
 
----
-
-## Project Structure
-
-```
-.
-├── README.md            # This file
-├── components           # UI components (TaskCard)
-│   └── task_card.py
-├── config.py            # Settings and constants
-├── data                 # Database scripts and file
-│   ├── init_db.py       # DB initialization script
-│   └── todo.db          # SQLite database (after init)
-├── db.py                # CRUD operations on tasks
-├── icons                # Application icons
-├── main.py              # Entry point
-├── poetry.lock          # Poetry lock file
-├── pyproject.toml       # Poetry project config
-├── styles               # QSS style sheets
-├── ui                   # Qt UI definitions and generated modules
-├── ui_uploader.py       # Compile `.ui` files to Python
-└── windows              # Dialog windows implementation
-```
-
----
 
 ## Configuration
 

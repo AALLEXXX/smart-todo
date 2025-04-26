@@ -1,19 +1,20 @@
 import os
 import sys
 
-import config
-from components.task_card import TaskCard
-from db import add_task
-from db import archive_task
-from db import delete_task
-from db import get_active_tasks
-from db import update_task
 from PyQt6 import QtCore
 from PyQt6 import QtWidgets
-from ui.ui_MainWindow import Ui_MainWindow
-from windows.archive_dialog import ArchiveDialog
-from windows.task_dialog import TaskDetailDialog
-from windows.task_dialog import TaskDialog
+
+from app import config
+from app.components.task_card import TaskCard
+from app.db import add_task
+from app.db import archive_task
+from app.db import delete_task
+from app.db import get_active_tasks
+from app.db import update_task
+from app.ui.ui_MainWindow import Ui_MainWindow
+from app.windows.archive_dialog import ArchiveDialog
+from app.windows.task_dialog import TaskDetailDialog
+from app.windows.task_dialog import TaskDialog
 
 
 class MainWindow(QtWidgets.QMainWindow):
