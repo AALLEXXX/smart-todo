@@ -1,0 +1,82 @@
+/* Dark Theme */
+
+/* Базовые настройки */
+QWidget {
+    font-family: "Arial", sans-serif;
+    font-size: 14px;
+    background-color: #2b2b2b; /* Тёмный фон для всех QWidget */
+    color: #ffffff;
+}
+
+/* Чтобы QDialog (и любые диалоги) тоже имели тёмный фон */
+QDialog {
+    background-color: #2b2b2b;
+    color: #ffffff;
+}
+
+/* MainWindow */
+QMainWindow {
+    background-color: #2b2b2b;
+}
+
+/* ScrollArea */
+QScrollArea {
+    border: 1px solid #444;
+    background-color: #3c3f41;
+}
+
+/* Карточки */
+QFrame#taskCard {
+    background-color: #3c3f41;
+    border: 1px solid #5c5c5c;
+    border-radius: 5px;
+}
+
+/* Кнопки */
+QPushButton {
+    background-color: #555;
+    color: #ffffff;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 3px;
+}
+QPushButton:hover {
+    background-color: #666;
+}
+
+/* Поля ввода (LineEdit, TextEdit, ComboBox, DateEdit и т.д.) */
+QLineEdit, QTextEdit, QPlainTextEdit, QComboBox, QDateEdit {
+    background-color: #3c3f41; /* Чуть более светлый серый */
+    color: #ffffff;
+    border: 1px solid #5c5c5c;
+    border-radius: 3px;
+}
+
+/* Список в ComboBox */
+QComboBox QAbstractItemView {
+    background-color: #3c3f41;
+    color: #ffffff;
+    selection-background-color: #555;
+    border: 1px solid #5c5c5c;
+}
+
+/* Скроллбары (примерно) */
+QScrollBar:vertical {
+    background-color: #3c3f41;
+    width: 12px;
+    margin: 0px;
+}
+QScrollBar::handle:vertical {
+    background-color: #666;
+    min-height: 20px;
+    border-radius: 3px;
+}
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    background: none;
+    border: none;
+}
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: none;
+}

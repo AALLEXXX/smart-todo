@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "gpttodo"
+version = "0.1.0"
+description = ""
+authors = ["Alex <alexander.b@dvgroup.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.14"
+pyqt6 = "^6.8.1"
+pyinstaller = "^6.12.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
