@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from PyQt6 import QtWidgets
 
 from app import config
@@ -89,6 +91,7 @@ class BoardController:
 
     def load_tasks(self):
         self.clear_columns()
+        # собираем выбранные приоритеты
         selected = []
         if self.ui.lowPriorityCheckBox.isChecked():
             selected.append("Low")
@@ -98,10 +101,23 @@ class BoardController:
             selected.append("High")
         if not selected:
             selected = ["Low", "Medium", "High"]
+
+        # получаем и фильтруем задачи
+        tasks = [t for t in get_active_tasks() if t[3] in selected]
+
+        # сортируем по дедлайну: ближайшие в начало
+        def due_key(t):
+            d = t[6]
+            try:
+                return datetime.fromisoformat(d) if d else datetime.max
+            except ValueError:
+                return datetime.max
+
+        tasks.sort(key=due_key)
+
+        # распределяем по статусам
         tasks_by_status = {k: [] for k in self.columns}
-        for task in get_active_tasks():
-            if task[3] not in selected:
-                continue
+        for task in tasks:
             card = TaskCard(
                 task,
                 theme=self.parent.current_theme,
@@ -111,6 +127,8 @@ class BoardController:
                 on_view=lambda t: TaskDetailDialog(t, self.parent).exec(),
             )
             tasks_by_status[task[4]].append(card)
+
+        # добавляем карточки в колонки
         for status, cards in tasks_by_status.items():
             layout = self.columns[status]
             for card in cards:

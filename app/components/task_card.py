@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from PyQt6 import QtCore
 from PyQt6 import QtGui
 from PyQt6 import QtWidgets
@@ -10,6 +12,7 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QApplication
 
 from app import config
+from app.db import resource_path
 from app.utils import format_deadline
 
 
@@ -47,6 +50,7 @@ class TaskCard(QtWidgets.QFrame):
         main_layout.setContentsMargins(0, 0, 0, 0)
 
         # Заголовок
+        title_layout = QtWidgets.QHBoxLayout()
         title_label = QtWidgets.QLabel(task[1])
         title_label.setWordWrap(True)
         title_label.setStyleSheet("font-weight: bold; font-size: 16px;")
@@ -55,7 +59,33 @@ class TaskCard(QtWidgets.QFrame):
             QtWidgets.QSizePolicy.Policy.Maximum,
         )
         title_label.setMaximumWidth(config.CARD_WIDTH - 30)
-        main_layout.addWidget(title_label)
+        title_layout.addWidget(title_label)
+
+        # spacer вытягивает пространство, чтобы иконка была справа
+        title_layout.addStretch()
+
+        # добавляем иконку, если дедлайн был до сегодняшнего дня
+        due_str = task[6]
+        if due_str:
+            try:
+                due_dt = datetime.fromisoformat(due_str).date()
+                if due_dt < datetime.now().date():
+                    icon = QtWidgets.QLabel()
+                    pix = QtGui.QPixmap(resource_path("icons/timeover.png"))
+                    icon.setPixmap(
+                        pix.scaled(
+                            16,
+                            16,
+                            Qt.AspectRatioMode.KeepAspectRatio,
+                            Qt.TransformationMode.SmoothTransformation,
+                        )
+                    )
+                    icon.setToolTip("Deadline passed")
+                    title_layout.addWidget(icon)
+            except ValueError:
+                pass
+
+        main_layout.addLayout(title_layout)
 
         # Дата
         due = format_deadline(task[6])
