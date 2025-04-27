@@ -1,29 +1,42 @@
-/* Light Theme */
+/* style_light.qss — только переопределяем цвета */
+
 QWidget {
-    font-family: "Arial", sans-serif;
-    font-size: 14px;
     background-color: #f4f5f7;
     color: #172b4d;
 }
 QMainWindow {
     background-color: #f4f5f7;
 }
+
 QScrollArea {
+    /* цвет бордюра и фон уже в base, но можно уточнить */
     border: 1px solid #dfe1e6;
     background-color: #fff;
 }
-QFrame#taskCard {
-    background-color: #ffffff;
-    border: 1px solid #dfe1e6;
-    border-radius: 5px;
-}
+
+/* кнопки общего вида */
 QPushButton {
     background-color: #ebecf0;
     color: #172b4d;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 3px;
 }
 QPushButton:hover {
     background-color: #dfe1e6;
+}
+
+/* табы */
+QWidget#tabBarWidget QPushButton {
+    background: transparent;
+    color: #172b4d;
+}
+QWidget#tabBarWidget QPushButton:hover {
+    background: #e1e4e8;
+}
+QWidget#tabBarWidget QPushButton:checked {
+    background: #ffffff;
+    color: #172b4d;
+}
+
+/* содержимое стеков */
+QStackedWidget {
+    background: #ffffff;
 }

@@ -1,0 +1,56 @@
+/* base.qss — общие правила для обоих тем */
+
+QWidget {
+    font-family: "Arial", sans-serif;
+    font-size: 14px;
+}
+
+/* Tab-bar: кнопки-табы */
+QWidget#tabBarWidget QPushButton {
+    border: none;
+    padding: 6px 16px;
+    font-weight: 500;
+    min-width: 120px;        /* вот здесь — делаем вкладки длиннее */
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+QWidget#tabBarWidget QPushButton:hover {
+    /* фон при наведении (переопределяется в теме) */
+}
+QWidget#tabBarWidget QPushButton:checked {
+    /* фон и цвет — в теме */
+}
+
+/* Карточки задач */
+QFrame#taskCard {
+    background-color: #ffffff;
+    border: 1px solid #dfe1e6;
+    border-radius: 5px;
+}
+
+/* Скролл-области */
+QScrollArea {
+    border: 1px solid #dfe1e6;
+    background-color: #fff;
+}
+
+/* Кнопки общего вида */
+QPushButton {
+    border: none;
+    padding: 6px 10px;
+    border-radius: 3px;
+}
+QPushButton:hover {
+    /* фон при наведении — в теме */
+}
+
+/* Сброс “растягивания” табов (используем свои кнопки) */
+QTabBar {
+    qproperty-alignment: AlignLeft;
+    qproperty-expanding: false;
+}
+
+/* Фон контента */
+QStackedWidget {
+    /* фон задаём в теме */
+}
