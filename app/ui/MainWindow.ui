@@ -13,9 +13,56 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="mainLayout">
-    <item>
-     <widget class="QTabWidget" name="tabWidget"/>
-    </item>
+    <!-- 1) Сам QTabWidget с вертикальными вкладками -->
+<item>
+    <widget class="QWidget" name="tabBarWidget">
+      <layout class="QHBoxLayout" name="tabBarLayout">
+        <item>
+          <widget class="QPushButton" name="tabToday">
+            <property name="text"><string>Planning</string></property>
+            <property name="checkable"><bool>true</bool></property>
+            <property name="checked"><bool>true</bool></property>
+          </widget>
+        </item>
+        <item>
+          <widget class="QPushButton" name="tabBoard">
+            <property name="text"><string>Board</string></property>
+            <property name="checkable"><bool>true</bool></property>
+          </widget>
+        </item>
+        <item>
+          <widget class="QPushButton" name="tabHabits">
+            <property name="text"><string>Habits</string></property>
+            <property name="checkable"><bool>true</bool></property>
+          </widget>
+        </item>
+          <item>
+          <widget class="QWidget" name="tabSpacer">
+            <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+              </sizepolicy>
+            </property>
+          </widget>
+        </item>
+        <item>
+          <widget class="QPushButton" name="themeToggleButton">
+            <property name="text"><string>🌙</string></property>
+          </widget>
+        </item>
+      </layout>
+    </widget>
+  </item>
+
+    <!-- 2) Растягивающийся spacer, чтобы кнопка оказалась справа -->
+  <item>
+    <widget class="QStackedWidget" name="stackedWidget">
+      <widget class="QWidget" name="today_page"/>
+      <widget class="QWidget" name="board_page"/>
+      <widget class="QWidget" name="habits_page"/>
+    </widget>
+  </item>
    </layout>
   </widget>
  </widget>

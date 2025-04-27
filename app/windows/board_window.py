@@ -39,7 +39,6 @@ class BoardController:
         self.ui.mediumPriorityCheckBox.stateChanged.connect(self.load_tasks)
         self.ui.highPriorityCheckBox.stateChanged.connect(self.load_tasks)
         self.ui.addTaskButton.clicked.connect(self.add_task)
-        self.ui.themeToggleButton.clicked.connect(self.parent.toggle_theme)
         self.ui.archiveButton.clicked.connect(self.parent.open_archive)
 
     def setup_drag_drop(self):

@@ -25,41 +25,46 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.today_page = QtWidgets.QWidget()
-        Ui_TodayPage().setupUi(self.today_page)
-        self.board_page = QtWidgets.QWidget()
+        Ui_TodayPage().setupUi(self.ui.today_page)
         self.board_ui = Ui_BoardPage()
-        self.board_ui.setupUi(self.board_page)
-        # Habits page
-        self.habits_page = QtWidgets.QWidget()
-        Ui_HabitsPage().setupUi(self.habits_page)
+        self.board_ui.setupUi(self.ui.board_page)
+        Ui_HabitsPage().setupUi(self.ui.habits_page)
 
-        tabs = self.ui.tabWidget
-        tabs.addTab(self.today_page, "Today")
-        tabs.addTab(self.board_page, "Board")
-        tabs.addTab(self.habits_page, "Habits")
-        tabs.setMovable(True)
-        tabs.setCurrentIndex(0)
+        self.stacked = self.ui.stackedWidget
+        self.current_theme = config.load_user_theme()
+        self.board = BoardController(self.ui.board_page, self)
+
+        self.ui.tabToday.clicked.connect(lambda: self.select_tab(0))
+        self.ui.tabBoard.clicked.connect(lambda: self.select_tab(1))
+        self.ui.tabHabits.clicked.connect(lambda: self.select_tab(2))
+        self.select_tab(0)
+
+        self.ui.themeToggleButton.clicked.connect(self.toggle_theme)
+        self.apply_theme()
 
         self.setMinimumSize(config.DEFAULT_WINDOW_WIDTH, config.DEFAULT_WINDOW_HEIGHT)
-        # Загружаем тему из INI-файла через config.load_user_theme()
-        self.current_theme = config.load_user_theme()
 
-        self.apply_theme()
-        self.board = BoardController(self.board_page, self)
+    def select_tab(self, idx):
+        # отметить кнопки
+        for btn in (self.ui.tabToday, self.ui.tabBoard, self.ui.tabHabits):
+            btn.setChecked(False)
+        {0: self.ui.tabToday, 1: self.ui.tabBoard, 2: self.ui.tabHabits}[idx].setChecked(True)
+        # показать страницу
+        self.stacked.setCurrentIndex(idx)
 
     def closeEvent(self, event):
         self.settings.setValue("MainWindow/geometry", self.saveGeometry())
         super().closeEvent(event)
 
     def apply_theme(self):
-        if getattr(sys, "frozen", False):
-            base_path = sys._MEIPASS
-        else:
-            base_path = os.path.dirname(os.path.abspath(__file__))
-        theme_path = os.path.join(base_path, config.THEMES[self.current_theme])
-        with open(theme_path, "r", encoding="utf-8") as f:
-            self.setStyleSheet(f.read())
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        with open(os.path.join(base_path, "app/styles/base.qss"), encoding="utf-8") as f:
+            base = f.read()
+        theme_file = "style_light.qss" if self.current_theme == "light" else "style_dark.qss"
+        with open(os.path.join(base_path, f"app/styles/{theme_file}"), encoding="utf-8") as f:
+            theme = f.read()
+        # объединяем
+        self.setStyleSheet(base + "\n" + theme)
 
     def toggle_theme(self):
         self.current_theme = "dark" if self.current_theme == "light" else "light"
