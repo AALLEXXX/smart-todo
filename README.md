@@ -58,7 +58,7 @@ Create `Todo.spec` in the project root with the following datas configuration:
 ```python
 # Todo.spec
 
- datas = [
+datas = [
      ('styles', 'styles'),
      ('ui', 'ui'),
      ('user_config.ini', '.'),

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TodayPage</class>
+ <widget class="QWidget" name="TodayPage">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <!-- empty placeholder -->
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

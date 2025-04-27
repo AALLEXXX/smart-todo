@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'ui/ArchiveDialog.ui'
+# Form implementation generated from reading ui file 'app/ui/ArchiveDialog.ui'
 #
 # Created by: PyQt6 UI code generator 6.8.1
 #
