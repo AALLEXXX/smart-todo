@@ -38,3 +38,12 @@ QWidget#tabBarWidget QPushButton:checked {
 QStackedWidget {
     background: #2e2e2e;
 }
+
+QFrame#taskCard {
+  background-color: #2b2b2b;
+  color: #ffffff;
+  border-left-color: /* ваш цвет приоритета */;
+}
+QFrame#taskCard QPushButton:hover {
+  color: #ff6b6b;
+}

@@ -40,3 +40,15 @@ QWidget#tabBarWidget QPushButton:checked {
 QStackedWidget {
     background: #ffffff;
 }
+
+/* Цвета карточки и приоритета в светлой теме */
+QFrame#taskCard {
+  background-color: #ffffff;
+  color: #172b4d;
+  border-left-color: /* здесь ваш цвет для Low/Medium/High */;
+}
+
+/* Подсветка кнопок */
+QFrame#taskCard QPushButton:hover {
+  color: #e53935;
+}

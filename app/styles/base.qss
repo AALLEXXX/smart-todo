@@ -54,3 +54,34 @@ QTabBar {
 QStackedWidget {
     /* фон задаём в теме */
 }
+
+/* Общий стиль карточки задачи */
+QFrame#taskCard {
+  border: 1px solid #dfe1e6;
+  border-left-width: 5px;     /* цвет приоритета задаётся в теме */
+  border-radius: 5px;
+  padding: 10px;
+  /* размеры и шрифт можно здесь оставить */
+  font-family: Arial, sans-serif;
+}
+
+/* Заголовок внутри карточки */
+QFrame#taskCard QLabel {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Кнопки внутри карточки */
+QFrame#taskCard QPushButton {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+}
+QFrame#taskCard QPushButton:hover {
+  color: #e53935;   /* или другой цвет «удалить» — можно перекрыть в теме */
+}
+
+
+QFrame#taskCard[priority="low"]   { border-left: 5px solid #9ccc65; }
+QFrame#taskCard[priority="medium"]{ border-left: 5px solid #FFA500; }
+QFrame#taskCard[priority="high"]  { border-left: 5px solid #f44336; }
