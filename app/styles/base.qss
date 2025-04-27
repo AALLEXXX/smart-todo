@@ -68,7 +68,7 @@ QFrame#taskCard {
 /* Заголовок внутри карточки */
 QFrame#taskCard QLabel {
   white-space: pre-wrap;
-  word-break: break-all;
+  qproperty-wordWrap: true;
 }
 
 /* Кнопки внутри карточки */
