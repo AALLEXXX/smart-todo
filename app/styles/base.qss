@@ -1,7 +1,7 @@
 /* base.qss — общие правила для обоих тем */
 
 QWidget {
-    font-family: "Arial", sans-serif;
+    font-family: "Arial", "sans-serif";
     font-size: 14px;
 }
 
@@ -46,7 +46,7 @@ QPushButton:hover {
 
 /* Сброс “растягивания” табов (используем свои кнопки) */
 QTabBar {
-    qproperty-alignment: AlignLeft;
+    qproperty-alignment: "AlignLeft";
     qproperty-expanding: false;
 }
 
@@ -62,12 +62,11 @@ QFrame#taskCard {
   border-radius: 5px;
   padding: 10px;
   /* размеры и шрифт можно здесь оставить */
-  font-family: Arial, sans-serif;
+  font-family: "Arial", "sans-serif";
 }
 
 /* Заголовок внутри карточки */
 QFrame#taskCard QLabel {
-  white-space: pre-wrap;
   qproperty-wordWrap: true;
 }
 

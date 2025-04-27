@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>HabitCard</class>
+ <widget class="QFrame" name="HabitCard">
+  <property name="frameShape">
+   <enum>QFrame::StyledPanel</enum>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="titleLabel">
+     <property name="text"><string>Habit Title</string></property>
+     <property name="styleSheet"><string>font-size:16px; font-weight:bold;</string></property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="calendarWidget">
+      <layout class="QVBoxLayout" name="calendarLayout"/>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

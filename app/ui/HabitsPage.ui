@@ -3,7 +3,52 @@
  <class>HabitsPage</class>
  <widget class="QWidget" name="HabitsPage">
   <layout class="QVBoxLayout" name="verticalLayout">
-   <!-- empty placeholder -->
+   <!-- Top bar: New Habit button and year selector -->
+   <item>
+    <layout class="QHBoxLayout" name="topBarLayout">
+     <item>
+      <widget class="QPushButton" name="newHabitButton">
+       <property name="text"><string>➕ New Habit</string></property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="headerSpacer">
+       <property name="orientation"><enum>Qt::Horizontal</enum></property>
+       <property name="sizeType"><enum>QSizePolicy::Expanding</enum></property>
+       <property name="sizeHint">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+
+   <!-- Scrollable list of habit cards -->
+   <item>
+    <widget class="QScrollArea" name="habitsScrollArea">
+     <property name="widgetResizable"><bool>true</bool></property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <widget class="QWidget" name="habitsContainer">
+      <layout class="QVBoxLayout" name="habitsListLayout">
+       <property name="alignment"><set>Qt::AlignTop</set></property>
+      </layout>
+     </widget>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>

@@ -6,11 +6,11 @@ from PyQt6 import QtWidgets
 
 from app import config
 from app.ui.ui_BoardPage import Ui_BoardPage
-from app.ui.ui_HabitsPage import Ui_HabitsPage
 from app.ui.ui_MainWindow import Ui_MainWindow
 from app.ui.ui_TodayPage import Ui_TodayPage
 from app.windows.archive_dialog import ArchiveDialog
 from app.windows.board_window import BoardController
+from app.windows.habits_page import HabitsPageController
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -28,11 +28,11 @@ class MainWindow(QtWidgets.QMainWindow):
         Ui_TodayPage().setupUi(self.ui.today_page)
         self.board_ui = Ui_BoardPage()
         self.board_ui.setupUi(self.ui.board_page)
-        Ui_HabitsPage().setupUi(self.ui.habits_page)
 
         self.stacked = self.ui.stackedWidget
         self.current_theme = config.load_user_theme()
         self.board = BoardController(self.ui.board_page, self)
+        self.habits_controller = HabitsPageController(self.ui.habits_page, self)
 
         self.ui.tabToday.clicked.connect(lambda: self.select_tab(0))
         self.ui.tabBoard.clicked.connect(lambda: self.select_tab(1))

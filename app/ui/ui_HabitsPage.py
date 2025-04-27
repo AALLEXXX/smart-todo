@@ -15,9 +15,42 @@ class Ui_HabitsPage(object):
         HabitsPage.setObjectName("HabitsPage")
         self.verticalLayout = QtWidgets.QVBoxLayout(HabitsPage)
         self.verticalLayout.setObjectName("verticalLayout")
+        self.topBarLayout = QtWidgets.QHBoxLayout()
+        self.topBarLayout.setObjectName("topBarLayout")
+        self.newHabitButton = QtWidgets.QPushButton(parent=HabitsPage)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.newHabitButton.sizePolicy().hasHeightForWidth())
+        self.newHabitButton.setSizePolicy(sizePolicy)
+        self.newHabitButton.setObjectName("newHabitButton")
+        self.topBarLayout.addWidget(self.newHabitButton)
+        spacerItem = QtWidgets.QSpacerItem(
+            0, 0, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum
+        )
+        self.topBarLayout.addItem(spacerItem)
+        self.verticalLayout.addLayout(self.topBarLayout)
+        self.habitsScrollArea = QtWidgets.QScrollArea(parent=HabitsPage)
+        self.habitsScrollArea.setWidgetResizable(True)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.habitsScrollArea.sizePolicy().hasHeightForWidth())
+        self.habitsScrollArea.setSizePolicy(sizePolicy)
+        self.habitsScrollArea.setObjectName("habitsScrollArea")
+        self.habitsContainer = QtWidgets.QWidget()
+        self.habitsContainer.setObjectName("habitsContainer")
+        self.habitsListLayout = QtWidgets.QVBoxLayout(self.habitsContainer)
+        self.habitsListLayout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
+        self.habitsListLayout.setObjectName("habitsListLayout")
+        self.habitsScrollArea.setWidget(self.habitsContainer)
+        self.verticalLayout.addWidget(self.habitsScrollArea)
 
         self.retranslateUi(HabitsPage)
         QtCore.QMetaObject.connectSlotsByName(HabitsPage)
 
     def retranslateUi(self, HabitsPage):
-        pass
+        _translate = QtCore.QCoreApplication.translate
+        self.newHabitButton.setText(_translate("HabitsPage", "➕ New Habit"))

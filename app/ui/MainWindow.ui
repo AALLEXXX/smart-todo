@@ -19,7 +19,7 @@
       <layout class="QHBoxLayout" name="tabBarLayout">
         <item>
           <widget class="QPushButton" name="tabToday">
-            <property name="text"><string>Planning</string></property>
+            <property name="text"><string>ToDay</string></property>
             <property name="checkable"><bool>true</bool></property>
             <property name="checked"><bool>true</bool></property>
           </widget>

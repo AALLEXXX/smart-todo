@@ -67,7 +67,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "ToDo Planner 📃"))
-        self.tabToday.setText(_translate("MainWindow", "Planning"))
+        self.tabToday.setText(_translate("MainWindow", "ToDay"))
         self.tabBoard.setText(_translate("MainWindow", "Board"))
         self.tabHabits.setText(_translate("MainWindow", "Habits"))
         self.themeToggleButton.setText(_translate("MainWindow", "🌙"))

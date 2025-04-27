@@ -45,6 +45,9 @@ def add_task(title, description, priority, status, due_date, sort_index):
 
 
 def update_task(task_id, **fields):
+    if "status" in fields and fields["status"] == "Done":
+        fields["completed_at"] = datetime.now().isoformat()
+
     keys = ", ".join(f"{k}=?" for k in fields)
     values = list(fields.values())
     values.append(task_id)
@@ -66,3 +69,59 @@ def delete_task(task_id):
         cursor = conn.cursor()
         cursor.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
         conn.commit()
+
+
+def add_habit(title, reward, start_date, end_date, frequency, hard_mode):
+    """
+    Создаёт новую привычку и возвращает её ID.
+    """
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO habits (title, reward, start_date, end_date, frequency, hard_mode, created_at) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?)",
+        (
+            title,
+            reward,
+            start_date,
+            end_date,
+            frequency,
+            int(hard_mode),
+            datetime.now().isoformat(),
+        ),
+    )
+    conn.commit()
+    return cur.lastrowid
+
+
+def get_habits(year=None):
+    """
+    Возвращает список привычек. Если указан год, фильтрует по end_date или start_date.
+    """
+    conn = get_connection()
+    cur = conn.cursor()
+    if year:
+        start = f"{year}-01-01"
+        end = f"{year}-12-31"
+        cur.execute(
+            "SELECT * FROM habits WHERE (start_date<=? AND end_date>=?) OR (start_date>=? AND start_date<=?)",
+            (end, start, start, end),
+        )
+    else:
+        cur.execute("SELECT * FROM habits")
+    return cur.fetchall()
+
+
+def get_habit_logs(habit_id: int, year: int = None):
+    """Return all log records for a habit; if year provided, filter to that calendar year."""
+    conn = get_connection()
+    cur = conn.cursor()
+    if year:
+        start = f"{year}-01-01"
+        end = f"{year}-12-31"
+        cur.execute("SELECT * FROM habit_logs WHERE habit_id=? AND log_date BETWEEN ? AND ?", (habit_id, start, end))
+    else:
+        cur.execute("SELECT * FROM habit_logs WHERE habit_id=?", (habit_id,))
+    rows = cur.fetchall()
+    # parse dates
+    return [(r[0], r[1], datetime.fromisoformat(r[2]).date(), r[3]) for r in rows]

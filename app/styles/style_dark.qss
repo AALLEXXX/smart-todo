@@ -47,3 +47,12 @@ QFrame#taskCard {
 QFrame#taskCard QPushButton:hover {
   color: #ff6b6b;
 }
+
+
+/* HabitCalendar: цвет заполненных дней */
+#habitCalendar {
+    qproperty-activeColor:   #76ff03;  /* ярко-зелёный для выполненных дней */
+    qproperty-inactiveColor: #696969;  /* серый для невыполненных и вне периода */
+    qproperty-textColor:     #ffffff;  /* белый для подписей дней и месяцев */
+    /* шрифты уже заданы через qproperty-weekdayFontPointSize и monthFontPointSize */
+}
