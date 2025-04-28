@@ -37,8 +37,11 @@ class HabitCalendar(QWidget):
         else:
             self.start = date(self.current_year, 1, 1)
             self.end = date(self.current_year, 12, 31)
-        offset = (self.start.weekday() + 6) % 7
+
+        # теперь смещение = номер дня недели (Mon=0, Tue=1, … Sun=6)
+        offset = self.start.weekday()
         self.display_start = self.start - timedelta(days=offset)
+
         total_days = (self.end - self.display_start).days + 1
         self.weeks = (total_days + 6) // 7
         w = self.weeks * (self.square + self.spacing) + 40

@@ -4,18 +4,21 @@ import sys
 from PyQt6 import QtCore
 from PyQt6 import QtWidgets
 
-from app import config
+import config
+from app.db import evaluate_hard_habits
 from app.ui.ui_BoardPage import Ui_BoardPage
 from app.ui.ui_MainWindow import Ui_MainWindow
-from app.ui.ui_TodayPage import Ui_TodayPage
 from app.windows.archive_dialog import ArchiveDialog
 from app.windows.board_window import BoardController
 from app.windows.habits_page import HabitsPageController
+from app.windows.today_page import TodayPageController
 
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
+
+        evaluate_hard_habits()
 
         self.settings = QtCore.QSettings(config.USER_CONFIG_PATH, QtCore.QSettings.Format.IniFormat)
         geometry = self.settings.value("MainWindow/geometry", type=QtCore.QByteArray)
@@ -25,7 +28,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        Ui_TodayPage().setupUi(self.ui.today_page)
+        self.today_controller = TodayPageController(self.ui.today_page)
+
         self.board_ui = Ui_BoardPage()
         self.board_ui.setupUi(self.ui.board_page)
 
@@ -51,6 +55,13 @@ class MainWindow(QtWidgets.QMainWindow):
         {0: self.ui.tabToday, 1: self.ui.tabBoard, 2: self.ui.tabHabits}[idx].setChecked(True)
         # показать страницу
         self.stacked.setCurrentIndex(idx)
+
+        if idx == 0:  # Today
+            self.today_controller.load_today_habits()
+        elif idx == 1:  # Board
+            self.board.load_tasks()
+        elif idx == 2:  # Habits
+            self.habits_controller.load_habits()
 
     def closeEvent(self, event):
         self.settings.setValue("MainWindow/geometry", self.saveGeometry())

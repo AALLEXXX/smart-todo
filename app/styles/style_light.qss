@@ -60,3 +60,12 @@ QFrame#taskCard QPushButton:hover {
     qproperty-textColor:     #000000;  /* чёрный для подписей дней и месяцев */
     /* шрифты через qproperty-weekdayFontPointSize и monthFontPointSize */
 }
+
+QFrame#habitCard {
+    background-color: #ffffff;
+    color: #172b4d;
+}
+QFrame#habitCard QLabel#title,
+QFrame#habitCard QLabel#streak {
+    color: #172b4d;
+}

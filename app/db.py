@@ -1,6 +1,8 @@
 import os
 import sqlite3
 import sys
+from datetime import date
+from datetime import date as _date
 from datetime import datetime
 
 
@@ -71,7 +73,7 @@ def delete_task(task_id):
         conn.commit()
 
 
-def add_habit(title, reward, start_date, end_date, frequency, hard_mode):
+def add_habit(title, reward, start_date, end_date, frequency, hard_mode, items: list[str]):
     """
     Создаёт новую привычку и возвращает её ID.
     """
@@ -90,8 +92,16 @@ def add_habit(title, reward, start_date, end_date, frequency, hard_mode):
             datetime.now().isoformat(),
         ),
     )
+
+    habit_id = cur.lastrowid
+    for idx, desc in enumerate(items):
+        cur.execute(
+            "INSERT INTO habit_items (habit_id, description, sort_index) VALUES (?, ?, ?)", (habit_id, desc, idx)
+        )
+
     conn.commit()
-    return cur.lastrowid
+
+    return habit_id
 
 
 def get_habits(year=None):
@@ -113,15 +123,101 @@ def get_habits(year=None):
 
 
 def get_habit_logs(habit_id: int, year: int = None):
-    """Return all log records for a habit; if year provided, filter to that calendar year."""
     conn = get_connection()
     cur = conn.cursor()
     if year:
         start = f"{year}-01-01"
         end = f"{year}-12-31"
-        cur.execute("SELECT * FROM habit_logs WHERE habit_id=? AND log_date BETWEEN ? AND ?", (habit_id, start, end))
+        # используем date() чтобы отбросить время
+        cur.execute(
+            "SELECT * FROM habit_logs WHERE habit_id=? AND date(log_date) BETWEEN ? AND ?",
+            (habit_id, start, end),
+        )
     else:
         cur.execute("SELECT * FROM habit_logs WHERE habit_id=?", (habit_id,))
     rows = cur.fetchall()
-    # parse dates
+    # parse dates...
     return [(r[0], r[1], datetime.fromisoformat(r[2]).date(), r[3]) for r in rows]
+
+
+def get_habit_items(habit_id: int):
+    with get_connection() as conn:
+        cur = conn.cursor()
+        cur.execute("SELECT description FROM habit_items WHERE habit_id=? ORDER BY sort_index", (habit_id,))
+        return [r[0] for r in cur.fetchall()]
+
+
+def update_habit_log(habit_id: int, log_date: str | date, completed: bool):
+    # всегда храним только YYYY-MM-DD
+    if isinstance(log_date, _date):
+        log_iso = log_date.isoformat()
+    else:
+        # если строка с временем, отрезаем
+        log_iso = log_date.split("T")[0]
+
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "UPDATE habit_logs SET completed = ? WHERE habit_id = ? AND log_date = ?",
+        (int(completed), habit_id, log_iso),
+    )
+    if cur.rowcount == 0:
+        cur.execute(
+            "INSERT INTO habit_logs (habit_id, log_date, completed) VALUES (?, ?, ?)",
+            (habit_id, log_iso, int(completed)),
+        )
+    conn.commit()
+
+
+def evaluate_hard_habits():
+    """
+    Для всех hard_mode=1 и is_failed=0:
+    проверяем все обязательные даты от start_date до вчерашнего;
+    если хотя бы один обязательный день не выполнен — ставим is_failed=1.
+    """
+    from datetime import date
+    from datetime import timedelta
+
+    conn = get_connection()
+    cur = conn.cursor()
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+
+    cur.execute("SELECT id, start_date, end_date, frequency FROM habits WHERE hard_mode=1 AND is_failed=0")
+    rows = cur.fetchall()
+
+    for hid, start_str, end_str, freq in rows:
+        # отбросить время, оставить только YYYY-MM-DD
+        start_iso = start_str.split("T")[0]
+        start = date.fromisoformat(start_iso)
+
+        if end_str:
+            end_iso = end_str.split("T")[0]
+            end = date.fromisoformat(end_iso)
+        else:
+            end = yesterday
+
+        period_end = min(end, yesterday)
+
+        missed = False
+        current = start
+        while current <= period_end:
+            need = (
+                freq == "daily"
+                or (freq == "weekdays" and current.weekday() < 5)
+                or (freq == "weekends" and current.weekday() >= 5)
+            )
+            if need:
+                cur.execute(
+                    "SELECT completed FROM habit_logs WHERE habit_id=? AND date(log_date)=?", (hid, current.isoformat())
+                )
+                row = cur.fetchone()
+                if not row or row[0] != 1:
+                    missed = True
+                    break
+            current += timedelta(days=1)
+
+        if missed:
+            cur.execute("UPDATE habits SET is_failed=1 WHERE id=?", (hid,))
+
+    conn.commit()

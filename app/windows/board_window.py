@@ -2,7 +2,7 @@ from datetime import datetime
 
 from PyQt6 import QtWidgets
 
-from app import config
+import config
 from app.components.task_card import TaskCard
 from app.db import add_task
 from app.db import archive_task

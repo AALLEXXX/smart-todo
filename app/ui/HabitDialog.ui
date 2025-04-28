@@ -15,11 +15,17 @@
    <property name="spacing">
     <number>10</number>
    </property>
+
+   <!-- Title -->
    <item>
     <widget class="QLineEdit" name="titleEdit">
-     <property name="placeholderText"><string>Habit Title</string></property>
+     <property name="placeholderText">
+      <string>Habit Title</string>
+     </property>
     </widget>
    </item>
+
+   <!-- FormLayout with date, frequency, hard mode, reward -->
    <item>
     <layout class="QFormLayout" name="formLayout">
      <property name="margin">
@@ -31,49 +37,126 @@
      <property name="verticalSpacing">
       <number>10</number>
      </property>
+
      <item row="1" column="0">
       <widget class="QLabel" name="labelEnd">
-       <property name="text"><string>End Date:</string></property>
+       <property name="text">
+        <string>End Date:</string>
+       </property>
       </widget>
      </item>
      <item row="1" column="1">
       <widget class="QDateEdit" name="endDateEdit">
-       <property name="calendarPopup"><bool>true</bool></property>
-       <property name="date"><date>2025-12-31</date></property>
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+       <property name="date">
+        <date>2025-12-31</date>
+       </property>
       </widget>
      </item>
+
      <item row="2" column="0">
       <widget class="QLabel" name="labelFreq">
-       <property name="text"><string>Frequency:</string></property>
+       <property name="text">
+        <string>Frequency:</string>
+       </property>
       </widget>
      </item>
      <item row="2" column="1">
       <widget class="QComboBox" name="freqCombo">
-       <item><property name="text"><string>daily</string></property></item>
-       <item><property name="text"><string>weekdays</string></property></item>
-       <item><property name="text"><string>weekends</string></property></item>
+       <item>
+        <property name="text">
+         <string>daily</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>weekdays</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>weekends</string>
+        </property>
+       </item>
       </widget>
      </item>
+
      <item row="3" column="0">
       <widget class="QLabel" name="labelHard">
-       <property name="text"><string>Hard Mode:</string></property>
+       <property name="text">
+        <string>Hard Mode:</string>
+       </property>
       </widget>
      </item>
      <item row="3" column="1">
       <widget class="QCheckBox" name="hardCheck"/>
      </item>
+
      <item row="4" column="0">
       <widget class="QLabel" name="labelReward">
-       <property name="text"><string>Reward:</string></property>
+       <property name="text">
+        <string>Reward:</string>
+       </property>
       </widget>
      </item>
      <item row="4" column="1">
       <widget class="QLineEdit" name="rewardEdit">
-       <property name="placeholderText"><string>What reward awaits?</string></property>
+       <property name="placeholderText">
+        <string>What reward awaits?</string>
+       </property>
       </widget>
      </item>
     </layout>
    </item>
+
+   <!-- Checklist items group with scroll -->
+   <item>
+    <widget class="QGroupBox" name="itemsGroup">
+     <property name="title">
+      <string>Checklist Items</string>
+     </property>
+     <layout class="QVBoxLayout" name="itemsGroupLayout">
+      <item>
+       <widget class="QScrollArea" name="itemsScrollArea">
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <property name="maximumHeight">
+         <number>200</number>
+        </property>
+        <widget class="QWidget" name="scrollAreaWidgetContents">
+         <property name="geometry">
+          <rect>
+           <x>0</x><y>0</y><width>200</width><height>200</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="itemsLayout">
+          <property name="spacing">
+           <number>4</number>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+
+   <!-- Add item button -->
+   <item>
+    <widget class="QPushButton" name="addItemBtn">
+     <property name="text">
+      <string>＋ Add Item</string>
+     </property>
+    </widget>
+   </item>
+
+   <!-- Cancel / Create buttons -->
    <item>
     <layout class="QHBoxLayout" name="buttonsLayout">
      <property name="margin">
@@ -84,16 +167,21 @@
      </property>
      <item>
       <widget class="QPushButton" name="cancelBtn">
-       <property name="text"><string>Cancel</string></property>
+       <property name="text">
+        <string>Cancel</string>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="okBtn">
-       <property name="text"><string>Create</string></property>
+       <property name="text">
+        <string>Create</string>
+       </property>
       </widget>
      </item>
     </layout>
    </item>
+
   </layout>
  </widget>
  <resources/>

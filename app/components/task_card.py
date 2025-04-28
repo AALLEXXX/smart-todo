@@ -11,7 +11,7 @@ from PyQt6.QtGui import QPainter
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QApplication
 
-from app import config
+import config
 from app.db import resource_path
 from app.utils import format_deadline
 
