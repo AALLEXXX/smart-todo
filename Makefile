@@ -24,8 +24,9 @@ build:
 	pyinstaller \
 	  --name "AlexTodo" \
 	  --icon "app/icons/app_icns.icns" \
-	  --add-data "app/styles:styles" \
-	  --add-data "app/ui:ui" \
+	  --add-data "app/styles:app/styles" \
+	  --add-data "app/ui:app/ui" \
+	  --add-data "app/icons:app/icons" \
 	  --add-data "app/user_config.ini:." \
 	  --add-data "app/data/todo.db:data" \
 	  --windowed main.py
