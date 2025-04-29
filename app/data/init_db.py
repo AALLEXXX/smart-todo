@@ -98,6 +98,21 @@ def init_db():
     """
     )
 
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS habit_item_logs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            habit_id INTEGER NOT NULL,
+            item_id INTEGER NOT NULL,
+            log_date TEXT NOT NULL,
+            completed INTEGER NOT NULL DEFAULT 0,
+            FOREIGN KEY(habit_id) REFERENCES habits(id) ON DELETE CASCADE,
+            FOREIGN KEY(item_id) REFERENCES habit_items(id) ON DELETE CASCADE,
+            UNIQUE(habit_id, item_id, log_date)
+        );
+        """
+    )
+
     if MODE == "dev":
         from datetime import date
         from datetime import datetime as _dt

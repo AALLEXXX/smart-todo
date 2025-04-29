@@ -51,6 +51,19 @@
             <property name="text"><string>🌙</string></property>
           </widget>
         </item>
+        <item>
+          <widget class="QLabel" name="versionLabel">
+            <property name="text">
+              <string></string>
+            </property>
+            <property name="alignment">
+              <set>Qt::AlignCenter</set>
+            </property>
+            <property name="styleSheet">
+              <string>color: #888888;</string>
+            </property>
+          </widget>
+        </item>
       </layout>
     </widget>
   </item>

@@ -8,9 +8,11 @@ from PyQt6.QtWidgets import QMessageBox
 from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtWidgets import QWidget
 
+from app.db import get_habit_item_logs
 from app.db import get_habit_items
 from app.db import get_habit_logs
 from app.db import get_habits
+from app.db import update_habit_item_log
 from app.db import update_habit_log
 from app.ui.ui_TodayPage import Ui_TodayPage
 
@@ -20,30 +22,6 @@ class TodayPageController:
         self.container = container
         self.ui = Ui_TodayPage()
         self.ui.setupUi(self.container)
-
-        # theme = config.load_user_theme()
-        # icon_name = f"icons/no_habit_today_{theme}.png"
-        # icon_path = resource_path(icon_name)
-        #
-        # # Загружаем и масштабируем иконку
-        # pixmap = QPixmap(icon_path)
-        # pixmap = pixmap.scaled(
-        #     100, 100,
-        #     Qt.AspectRatioMode.KeepAspectRatio,
-        #     Qt.TransformationMode.SmoothTransformation
-        # )
-        # self.ui.noHabitsImage.setPixmap(pixmap)
-        # self.ui.noHabitsImage.setFixedSize(100, 100)
-        #
-        # # placeholder растягивается и центрируется
-        # self.ui.noHabitsWidget.setSizePolicy(
-        #     QSizePolicy.Policy.Expanding,
-        #     QSizePolicy.Policy.Minimum
-        # )
-        # self.ui.verticalLayout.setAlignment(
-        #     self.ui.noHabitsWidget,
-        #     Qt.AlignmentFlag.AlignHCenter
-        # )
 
         self.load_today_habits()
 
@@ -105,20 +83,26 @@ class TodayPageController:
         lbl_streak.setObjectName("streak")
         vbox.addWidget(lbl_streak)
 
-        items = get_habit_items(habit_id)
-        boxes = []
-        todays_done = {d: done for _, _, d, done in get_habit_logs(habit_id)}.get(date.today(), False)
-        for desc in items:
+        items = get_habit_items(habit_id)  # now returns list of (item_id, description)
+        item_logs = get_habit_item_logs(habit_id, date.today())
+        for item_id, desc in items:
             chk = QCheckBox(desc)
-            chk.setChecked(todays_done)
-            boxes.append(chk)
+            is_done = item_logs.get(item_id, False)
+            chk.setChecked(is_done)
             vbox.addWidget(chk)
-            chk.stateChanged.connect(lambda _, hid=habit_id, b=boxes: self._on_check_change(hid, b))
+            chk.stateChanged.connect(
+                lambda state, hid=habit_id, iid=item_id, box=chk: self._on_item_check_change(hid, iid, box)
+            )
 
         self.ui.habitsLayout.addWidget(card)
 
-    def _on_check_change(self, habit_id, boxes):
-        done_all = all(box.isChecked() for box in boxes)
-        update_habit_log(habit_id, date.today(), done_all)
-        if done_all:
+    def _on_item_check_change(self, habit_id: int, item_id: int, checkbox: QCheckBox):
+        completed = checkbox.isChecked()
+        update_habit_item_log(habit_id, item_id, date.today(), completed)
+        # Update overall habit completion flag
+        items = get_habit_items(habit_id)
+        logs = get_habit_item_logs(habit_id, date.today())
+        all_done = all(logs.get(iid, False) for iid, _ in items)
+        update_habit_log(habit_id, date.today(), all_done)
+        if all_done:
             QMessageBox.information(self.container, "Congratulations", "Ура, ты молодец!")

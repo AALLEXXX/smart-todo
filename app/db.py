@@ -143,8 +143,8 @@ def get_habit_logs(habit_id: int, year: int = None):
 def get_habit_items(habit_id: int):
     with get_connection() as conn:
         cur = conn.cursor()
-        cur.execute("SELECT description FROM habit_items WHERE habit_id=? ORDER BY sort_index", (habit_id,))
-        return [r[0] for r in cur.fetchall()]
+        cur.execute("SELECT id, description FROM habit_items WHERE habit_id=? ORDER BY sort_index", (habit_id,))
+        return cur.fetchall()
 
 
 def update_habit_log(habit_id: int, log_date: str | date, completed: bool):
@@ -165,6 +165,39 @@ def update_habit_log(habit_id: int, log_date: str | date, completed: bool):
         cur.execute(
             "INSERT INTO habit_logs (habit_id, log_date, completed) VALUES (?, ?, ?)",
             (habit_id, log_iso, int(completed)),
+        )
+    conn.commit()
+
+
+def get_habit_item_logs(habit_id: int, log_date: str | _date):
+    if isinstance(log_date, _date):
+        log_iso = log_date.isoformat()
+    else:
+        log_iso = log_date.split("T")[0]
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT item_id, completed FROM habit_item_logs WHERE habit_id=? AND log_date=?",
+        (habit_id, log_iso),
+    )
+    return {r[0]: bool(r[1]) for r in cur.fetchall()}
+
+
+def update_habit_item_log(habit_id: int, item_id: int, log_date: str | _date, completed: bool):
+    if isinstance(log_date, _date):
+        log_iso = log_date.isoformat()
+    else:
+        log_iso = log_date.split("T")[0]
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "UPDATE habit_item_logs SET completed=? WHERE habit_id=? AND item_id=? AND log_date=?",
+        (int(completed), habit_id, item_id, log_iso),
+    )
+    if cur.rowcount == 0:
+        cur.execute(
+            "INSERT INTO habit_item_logs (habit_id, item_id, log_date, completed) VALUES (?, ?, ?, ?)",
+            (habit_id, item_id, log_iso, int(completed)),
         )
     conn.commit()
 

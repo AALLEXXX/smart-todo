@@ -28,6 +28,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        try:
+            version = config.VERSION
+        except AttributeError:
+            version = ""
+        self.ui.versionLabel.setText(version)
+
         self.today_controller = TodayPageController(self.ui.today_page)
 
         self.board_ui = Ui_BoardPage()
