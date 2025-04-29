@@ -98,11 +98,29 @@ class TodayPageController:
 
     def _on_item_check_change(self, habit_id: int, item_id: int, checkbox: QCheckBox):
         completed = checkbox.isChecked()
+        # сохраняем лог по пункту
         update_habit_item_log(habit_id, item_id, date.today(), completed)
-        # Update overall habit completion flag
+
+        # проверяем, все ли пункты сегодня выполнены
         items = get_habit_items(habit_id)
         logs = get_habit_item_logs(habit_id, date.today())
         all_done = all(logs.get(iid, False) for iid, _ in items)
+
+        # обновляем общий лог привычки
         update_habit_log(habit_id, date.today(), all_done)
+
+        # выясняем дату окончания привычки
+        rec = next((r for r in get_habits(None) if r[0] == habit_id), None)
+        end_date = None
+        if rec and rec[4]:
+            end_date = datetime.fromisoformat(rec[4].split("T")[0]).date()
+
+        # показываем разное сообщение и обновляем Today-view
         if all_done:
-            QMessageBox.information(self.container, "Congratulations", "Ура, ты молодец!")
+            if end_date and date.today() >= end_date:
+                QMessageBox.information(self.container, "Habit Completed", "Поздравляем! Вы завершили эту привычку.")
+            else:
+                QMessageBox.information(self.container, "Congratulations", "Ура, ты молодец!")
+            # после полного выполнения (и особенно в последний день)
+            # убираем карточку из Today
+            self.load_today_habits()

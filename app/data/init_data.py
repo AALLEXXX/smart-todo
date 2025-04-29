@@ -17,7 +17,7 @@ def init_data():
     end_iso = (today + timedelta(days=3)).isoformat()
     created_at = _dt.now().isoformat()
 
-    # Создаём «жёсткую» привычку с пустым днём пропуска
+    # Жёсткая демон-привычка с пропуском одного дня
     cursor.execute(
         "INSERT INTO habits (title, reward, start_date, end_date, frequency, hard_mode, is_failed, created_at) "
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
@@ -29,12 +29,45 @@ def init_data():
     demo_items = ["Item A", "Item B", "Item C"]
     for idx, desc in enumerate(demo_items):
         cursor.execute(
-            "INSERT INTO habit_items (habit_id, description, sort_index) VALUES (?, ?, ?)", (habit_id, desc, idx)
+            "INSERT INTO habit_items (habit_id, description, sort_index) VALUES (?, ?, ?)",
+            (habit_id, desc, idx),
+        )
+
+    # Логи: выполнено 3 дня назад и 1 день назад, пропущен 2 дня назад
+    cursor.execute(
+        "INSERT INTO habit_logs (habit_id, log_date, completed) VALUES (?, ?, ?)",
+        (habit_id, (today - timedelta(days=3)).isoformat(), 1),
+    )
+    cursor.execute(
+        "INSERT INTO habit_logs (habit_id, log_date, completed) VALUES (?, ?, ?)",
+        (habit_id, (today - timedelta(days=1)).isoformat(), 1),
+    )
+
+    # Вторая демон-привычка, которая заканчивается сегодня (последний день — сегодня)
+    start2 = (today - timedelta(days=2)).isoformat()
+    end2 = today.isoformat()
+    cursor.execute(
+        "INSERT INTO habits (title, reward, start_date, end_date, frequency, hard_mode, is_failed, created_at) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        ("Demo One-Day Habit", "Complete today only", start2, end2, "daily", 0, 0, created_at),
+    )
+    habit2 = cursor.lastrowid
+
+    # Пункты для второй привычки
+    items2 = ["Solo Item 1", "Solo Item 2"]
+    for idx2, desc2 in enumerate(items2):
+        cursor.execute(
+            "INSERT INTO habit_items (habit_id, description, sort_index) VALUES (?, ?, ?)",
+            (habit2, desc2, idx2),
         )
 
     cursor.execute(
         "INSERT INTO habit_logs (habit_id, log_date, completed) VALUES (?, ?, ?)",
-        (habit_id, (today - timedelta(days=1)).isoformat(), 1),
+        (habit2, (today - timedelta(days=2)).isoformat(), 1),
+    )
+    cursor.execute(
+        "INSERT INTO habit_logs (habit_id, log_date, completed) VALUES (?, ?, ?)",
+        (habit2, (today - timedelta(days=1)).isoformat(), 1),
     )
 
     # Тестовые задачи «взлом Пентагона»
@@ -139,7 +172,6 @@ def init_data():
         )
 
     print("тестовые данные созданы")
-
     conn.commit()
     conn.close()
 
