@@ -74,7 +74,7 @@ QFrame#taskCard QLabel {
 QFrame#taskCard QPushButton {
   background: transparent;
   border: none;
-  font-size: 14px;
+  font-size: 17px;
 }
 QFrame#taskCard QPushButton:hover {
   color: #e53935;   /* или другой цвет «удалить» — можно перекрыть в теме */

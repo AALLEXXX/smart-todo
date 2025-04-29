@@ -54,17 +54,15 @@ class TaskCard(QtWidgets.QFrame):
         title_label = QtWidgets.QLabel(task[1])
         title_label.setWordWrap(True)
         title_label.setStyleSheet("font-weight: bold; font-size: 16px;")
+        # 1) label растягивается, чтобы занять всё доступное место до иконки
         title_label.setSizePolicy(
-            QtWidgets.QSizePolicy.Policy.Preferred,
+            QtWidgets.QSizePolicy.Policy.Expanding,
             QtWidgets.QSizePolicy.Policy.Maximum,
         )
-        title_label.setMaximumWidth(config.CARD_WIDTH - 30)
-        title_layout.addWidget(title_label)
+        # 2) добавляем с stretch=1
+        title_layout.addWidget(title_label, 1)
 
-        # spacer вытягивает пространство, чтобы иконка была справа
-        title_layout.addStretch()
-
-        # добавляем иконку, если дедлайн был до сегодняшнего дня
+        # 3) иконка «просрочен»
         due_str = task[6]
         if due_str:
             try:
@@ -80,7 +78,11 @@ class TaskCard(QtWidgets.QFrame):
                             Qt.TransformationMode.SmoothTransformation,
                         )
                     )
-                    icon.setToolTip("Deadline passed")
+                    # фиксируем иконку по размеру — не даст ей расширяться
+                    icon.setSizePolicy(
+                        QtWidgets.QSizePolicy.Policy.Fixed,
+                        QtWidgets.QSizePolicy.Policy.Fixed,
+                    )
                     title_layout.addWidget(icon)
             except ValueError:
                 pass

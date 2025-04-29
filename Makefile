@@ -14,6 +14,11 @@ compile-ui:
 init-db:
 	poetry run python app/data/init_db.py
 
+init-db-dev:
+#     rm app/data/todo.db
+	poetry run python app/data/init_db.py
+	poetry run python app/data/init_data.py
+
 run:
 	poetry run python main.py
 
