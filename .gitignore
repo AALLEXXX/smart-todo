@@ -4,3 +4,10 @@ todo.db
 __pycache__/
 .DS_Store
 .idea/
+
+dist/
+build/
+
+*.spec
+
+*.ini

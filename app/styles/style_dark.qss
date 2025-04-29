@@ -1,82 +1,68 @@
-/* Dark Theme */
+/* style_dark.qss — только тёмная тема */
 
-/* Базовые настройки */
 QWidget {
-    font-family: "Arial", sans-serif;
-    font-size: 14px;
-    background-color: #2b2b2b; /* Тёмный фон для всех QWidget */
-    color: #ffffff;
+    background-color: #2e2e2e;
+    color: #ccc;
 }
-
-/* Чтобы QDialog (и любые диалоги) тоже имели тёмный фон */
-QDialog {
-    background-color: #2b2b2b;
-    color: #ffffff;
-}
-
-/* MainWindow */
 QMainWindow {
-    background-color: #2b2b2b;
+    background-color: #2e2e2e;
 }
 
-/* ScrollArea */
 QScrollArea {
     border: 1px solid #444;
-    background-color: #3c3f41;
+    background-color: #3a3a3a;
 }
 
-/* Карточки */
-QFrame#taskCard {
-    background-color: #3c3f41;
-    border: 1px solid #5c5c5c;
-    border-radius: 5px;
-}
-
-/* Кнопки */
 QPushButton {
-    background-color: #555;
-    color: #ffffff;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 3px;
+    background-color: #3a3a3a;
+    color: #ccc;
 }
 QPushButton:hover {
-    background-color: #666;
+    background-color: #505050;
 }
 
-/* Поля ввода (LineEdit, TextEdit, ComboBox, DateEdit и т.д.) */
-QLineEdit, QTextEdit, QPlainTextEdit, QComboBox, QDateEdit {
-    background-color: #3c3f41; /* Чуть более светлый серый */
-    color: #ffffff;
-    border: 1px solid #5c5c5c;
-    border-radius: 3px;
+/* табы */
+QWidget#tabBarWidget QPushButton {
+    background: transparent;
+    color: #ccc;
+}
+QWidget#tabBarWidget QPushButton:hover {
+    background: #505050;
+}
+QWidget#tabBarWidget QPushButton:checked {
+    background: #444;
+    color: #fff;
 }
 
-/* Список в ComboBox */
-QComboBox QAbstractItemView {
-    background-color: #3c3f41;
-    color: #ffffff;
-    selection-background-color: #555;
-    border: 1px solid #5c5c5c;
+/* содержимое стеков */
+QStackedWidget {
+    background: #2e2e2e;
 }
 
-/* Скроллбары (примерно) */
-QScrollBar:vertical {
-    background-color: #3c3f41;
-    width: 12px;
-    margin: 0px;
+QFrame#taskCard {
+  background-color: #2b2b2b;
+  color: #ffffff;
+  border-left-color: /* ваш цвет приоритета */;
 }
-QScrollBar::handle:vertical {
-    background-color: #666;
-    min-height: 20px;
-    border-radius: 3px;
+QFrame#taskCard QPushButton:hover {
+  color: #ff6b6b;
 }
-QScrollBar::add-line:vertical,
-QScrollBar::sub-line:vertical {
-    background: none;
-    border: none;
+
+
+/* HabitCalendar: цвет заполненных дней */
+#habitCalendar {
+    qproperty-activeColor:   #76ff03;  /* ярко-зелёный для выполненных дней */
+    qproperty-inactiveColor: #696969;  /* серый для невыполненных и вне периода */
+    qproperty-textColor:     #ffffff;  /* белый для подписей дней и месяцев */
+    /* шрифты уже заданы через qproperty-weekdayFontPointSize и monthFontPointSize */
 }
-QScrollBar::add-page:vertical,
-QScrollBar::sub-page:vertical {
-    background: none;
+
+QFrame#habitCard {
+    background-color: #2b2b2b;
+    color: #ccc;
+    border: 1px solid #444;
+}
+QFrame#habitCard QLabel#title,
+QFrame#habitCard QLabel#streak {
+    color: #eee;
 }

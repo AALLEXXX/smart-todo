@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'ui/TaskDialog.ui'
+# Form implementation generated from reading ui file 'app/ui/TaskDialog.ui'
 #
 # Created by: PyQt6 UI code generator 6.8.1
 #

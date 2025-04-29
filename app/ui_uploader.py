@@ -2,8 +2,8 @@ import os
 
 from PyQt6.uic import compileUi
 
-UI_FOLDER = "ui"
-OUTPUT_FOLDER = "ui"
+UI_FOLDER = "app/ui"
+OUTPUT_FOLDER = "app/ui"
 
 for filename in os.listdir(UI_FOLDER):
     if filename.endswith(".ui"):

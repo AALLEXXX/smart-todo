@@ -1,0 +1,139 @@
+/* base.qss — общие правила для обоих тем */
+
+QWidget {
+    font-family: "Arial", "sans-serif";
+    font-size: 14px;
+}
+
+/* Tab-bar: кнопки-табы */
+QWidget#tabBarWidget QPushButton {
+    border: none;
+    padding: 6px 16px;
+    font-weight: 500;
+    min-width: 120px;        /* вот здесь — делаем вкладки длиннее */
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+QWidget#tabBarWidget QPushButton:hover {
+    /* фон при наведении (переопределяется в теме) */
+}
+QWidget#tabBarWidget QPushButton:checked {
+    /* фон и цвет — в теме */
+}
+
+/* Карточки задач */
+QFrame#taskCard {
+    background-color: #ffffff;
+    border: 1px solid #dfe1e6;
+    border-radius: 5px;
+}
+
+/* Скролл-области */
+QScrollArea {
+    border: 1px solid #dfe1e6;
+    background-color: #fff;
+}
+
+/* Кнопки общего вида */
+QPushButton {
+    border: none;
+    padding: 6px 10px;
+    border-radius: 3px;
+}
+QPushButton:hover {
+    /* фон при наведении — в теме */
+}
+
+/* Сброс “растягивания” табов (используем свои кнопки) */
+QTabBar {
+    qproperty-alignment: "AlignLeft";
+    qproperty-expanding: false;
+}
+
+/* Фон контента */
+QStackedWidget {
+    /* фон задаём в теме */
+}
+
+/* Общий стиль карточки задачи */
+QFrame#taskCard {
+  border: 1px solid #dfe1e6;
+  border-left-width: 5px;     /* цвет приоритета задаётся в теме */
+  border-radius: 5px;
+  padding: 10px;
+  /* размеры и шрифт можно здесь оставить */
+  font-family: "Arial", "sans-serif";
+}
+
+/* Заголовок внутри карточки */
+QFrame#taskCard QLabel {
+  qproperty-wordWrap: true;
+}
+
+/* Кнопки внутри карточки */
+QFrame#taskCard QPushButton {
+  background: transparent;
+  border: none;
+  font-size: 17px;
+}
+QFrame#taskCard QPushButton:hover {
+  color: #e53935;   /* или другой цвет «удалить» — можно перекрыть в теме */
+}
+
+
+QFrame#taskCard[priority="low"]   { border-left: 5px solid #9ccc65; }
+QFrame#taskCard[priority="medium"]{ border-left: 5px solid #FFA500; }
+QFrame#taskCard[priority="high"]  { border-left: 5px solid #f44336; }
+
+
+/* TodayPage habit cards */
+QFrame#habitCard {
+    background-color: #ffffff;
+    border: 1px solid #dfe1e6;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 10px;
+}
+QFrame#habitCard QLabel#title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+QFrame#habitCard QLabel#streak {
+    font-size: 12px;
+    color: #555555;
+    margin-bottom: 8px;
+}
+QFrame#habitCard QCheckBox {
+    padding: 4px;
+    spacing: 6px;
+}
+
+/* HabitDetailDialog — minimalist modern styling */
+QDialog#HabitDetailDialog {
+    border-radius: 8px;
+    padding: 16px;
+}
+QDialog#HabitDetailDialog QLabel#titleLabel {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+QDialog#HabitDetailDialog QLabel {
+    margin: 4px 0;
+}
+QDialog#HabitDetailDialog QGroupBox#itemsGroup {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 4px;
+    margin-top: 12px;
+    padding: 8px;
+}
+QDialog#HabitDetailDialog QGroupBox#itemsGroup::title {
+    padding: 0 6px;
+}
+QDialog#HabitDetailDialog QPushButton#closeButton {
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-weight: 500;
+    /* background and text colors inherit theme defaults */
+}

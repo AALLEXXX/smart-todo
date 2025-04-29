@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>HabitDetailDialog</class>
+ <widget class="QDialog" name="HabitDetailDialog">
+  <property name="windowTitle"><string>Habit Details</string></property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+
+   <!-- Заголовок и статус -->
+   <item>
+    <layout class="QHBoxLayout" name="titleLayout">
+     <item>
+      <widget class="QLabel" name="titleLabel">
+       <property name="text"><string>Title</string></property>
+       <property name="alignment"><set>Qt::AlignLeft</set></property>
+       <property name="styleSheet"><string>font-size:18px; font-weight:bold;</string></property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="statusLabel">
+       <property name="text"><string>Active</string></property>
+       <property name="alignment"><set>Qt::AlignRight</set></property>
+       <property name="styleSheet"><string>font-weight:bold;</string></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+
+   <!-- Даты -->
+   <item>
+    <widget class="QLabel" name="datesLabel">
+     <property name="text"><string>Start – End</string></property>
+    </widget>
+   </item>
+
+   <!-- Стрик -->
+   <item>
+    <widget class="QLabel" name="streakLabel">
+     <property name="text"><string>Streak: 0</string></property>
+    </widget>
+   </item>
+
+   <!-- Награда -->
+   <item>
+    <widget class="QLabel" name="rewardLabel">
+     <property name="text"><string>Reward: …</string></property>
+    </widget>
+   </item>
+
+   <!-- Режим -->
+   <item>
+    <widget class="QLabel" name="hardModeLabel">
+     <property name="text"><string>Mode: Normal</string></property>
+    </widget>
+   </item>
+
+   <!-- Список пунктов -->
+   <item>
+    <widget class="QGroupBox" name="itemsGroup">
+     <property name="title"><string>Checklist Items</string></property>
+     <layout class="QVBoxLayout" name="itemsLayout"/>
+    </widget>
+   </item>
+
+   <!-- Кнопки -->
+   <item>
+    <layout class="QHBoxLayout" name="buttonsLayout">
+     <item>
+      <spacer name="spacer">
+       <property name="orientation"><enum>Qt::Horizontal</enum></property>
+       <property name="sizeType"><enum>QSizePolicy::Expanding</enum></property>
+       <property name="sizeHint">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="closeButton">
+       <property name="text"><string>Close</string></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

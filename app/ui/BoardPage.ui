@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>BoardPage</class>
+ <widget class="QWidget" name="BoardPage">
+  <layout class="QVBoxLayout" name="mainLayout">
+   <!-- Top bar with controls -->
+   <item>
+    <layout class="QHBoxLayout" name="topBar">
+     <item>
+      <widget class="QPushButton" name="addTaskButton">
+       <property name="text"><string>➕ Add Task</string></property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="priorityFilterLayout">
+       <item>
+        <widget class="QCheckBox" name="lowPriorityCheckBox">
+         <property name="text"><string>Low</string></property>
+         <property name="checked"><bool>true</bool></property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="mediumPriorityCheckBox">
+         <property name="text"><string>Medium</string></property>
+         <property name="checked"><bool>true</bool></property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="highPriorityCheckBox">
+         <property name="text"><string>High</string></property>
+         <property name="checked"><bool>true</bool></property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QPushButton" name="archiveButton">
+       <property name="text"><string>📦 Archive</string></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+
+   <!-- Column headers -->
+   <item>
+    <layout class="QHBoxLayout" name="columnHeaders">
+     <item>
+      <widget class="QLabel" name="backlogLabel">
+       <property name="text"><string>📥 Backlog</string></property>
+       <property name="alignment"><set>Qt::AlignHCenter</set></property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="inProgressLabel">
+       <property name="text"><string>🚧 In Progress</string></property>
+       <property name="alignment"><set>Qt::AlignHCenter</set></property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="blockedLabel">
+       <property name="text"><string>⛔ Blocked</string></property>
+       <property name="alignment"><set>Qt::AlignHCenter</set></property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="doneLabel">
+       <property name="text"><string>✅ Done</string></property>
+       <property name="alignment"><set>Qt::AlignHCenter</set></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+
+   <!-- Board columns -->
+   <item>
+    <layout class="QHBoxLayout" name="boardLayout">
+     <item>
+      <widget class="QScrollArea" name="backlogArea">
+       <property name="widgetResizable"><bool>true</bool></property>
+       <property name="minimumWidth"><number>250</number></property>
+       <widget class="QWidget" name="backlogContainer">
+        <layout class="QVBoxLayout" name="backlogList">
+         <property name="alignment"><set>Qt::AlignTop</set></property>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QScrollArea" name="inProgressArea">
+       <property name="widgetResizable"><bool>true</bool></property>
+       <property name="minimumWidth"><number>250</number></property>
+       <widget class="QWidget" name="inProgressContainer">
+        <layout class="QVBoxLayout" name="inProgressList">
+         <property name="alignment"><set>Qt::AlignTop</set></property>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QScrollArea" name="blockedArea">
+       <property name="widgetResizable"><bool>true</bool></property>
+       <property name="minimumWidth"><number>250</number></property>
+       <widget class="QWidget" name="blockedContainer">
+        <layout class="QVBoxLayout" name="blockedList">
+         <property name="alignment"><set>Qt::AlignTop</set></property>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QScrollArea" name="doneArea">
+       <property name="widgetResizable"><bool>true</bool></property>
+       <property name="minimumWidth"><number>250</number></property>
+       <widget class="QWidget" name="doneContainer">
+        <layout class="QVBoxLayout" name="doneList">
+         <property name="alignment"><set>Qt::AlignTop</set></property>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </item>
+
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -4,22 +4,21 @@ import sys
 from PyQt6 import QtCore
 from PyQt6 import QtWidgets
 
-from app import config
-from app.components.task_card import TaskCard
-from app.db import add_task
-from app.db import archive_task
-from app.db import delete_task
-from app.db import get_active_tasks
-from app.db import update_task
+import config
+from app.db import evaluate_hard_habits
+from app.ui.ui_BoardPage import Ui_BoardPage
 from app.ui.ui_MainWindow import Ui_MainWindow
 from app.windows.archive_dialog import ArchiveDialog
-from app.windows.task_dialog import TaskDetailDialog
-from app.windows.task_dialog import TaskDialog
+from app.windows.board_window import BoardController
+from app.windows.habits_page import HabitsPageController
+from app.windows.today_page import TodayPageController
 
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
+
+        evaluate_hard_habits()
 
         self.settings = QtCore.QSettings(config.USER_CONFIG_PATH, QtCore.QSettings.Format.IniFormat)
         geometry = self.settings.value("MainWindow/geometry", type=QtCore.QByteArray)
@@ -28,155 +27,67 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.setMinimumSize(config.DEFAULT_WINDOW_WIDTH, config.DEFAULT_WINDOW_HEIGHT)
-        # Загружаем тему из INI-файла через config.load_user_theme()
+
+        try:
+            version = config.VERSION
+        except AttributeError:
+            version = ""
+        self.ui.versionLabel.setText(version)
+
+        self.today_controller = TodayPageController(self.ui.today_page)
+
+        self.board_ui = Ui_BoardPage()
+        self.board_ui.setupUi(self.ui.board_page)
+
+        self.stacked = self.ui.stackedWidget
         self.current_theme = config.load_user_theme()
+        self.board = BoardController(self.ui.board_page, self)
+        self.habits_controller = HabitsPageController(self.ui.habits_page, self)
 
-        fixed_width = config.FIXED_WIDTH_COLUMN
-        self.ui.backlogArea.setMinimumWidth(fixed_width)
-        self.ui.backlogArea.setMaximumWidth(fixed_width)
-        self.ui.inProgressArea.setMinimumWidth(fixed_width)
-        self.ui.inProgressArea.setMaximumWidth(fixed_width)
-        self.ui.blockedArea.setMinimumWidth(fixed_width)
-        self.ui.blockedArea.setMaximumWidth(fixed_width)
-        self.ui.doneArea.setMinimumWidth(fixed_width)
-        self.ui.doneArea.setMaximumWidth(fixed_width)
+        self.ui.tabToday.clicked.connect(lambda: self.select_tab(0))
+        self.ui.tabBoard.clicked.connect(lambda: self.select_tab(1))
+        self.ui.tabHabits.clicked.connect(lambda: self.select_tab(2))
+        self.select_tab(0)
 
-        self.ui.lowPriorityCheckBox.stateChanged.connect(self.load_tasks)
-        self.ui.mediumPriorityCheckBox.stateChanged.connect(self.load_tasks)
-        self.ui.highPriorityCheckBox.stateChanged.connect(self.load_tasks)
-
-        self.columns = {
-            "Backlog": self.ui.backlogList,
-            "In Progress": self.ui.inProgressList,
-            "Blocked": self.ui.blockedList,
-            "Done": self.ui.doneList,
-        }
-        self.columnContainers = {
-            "Backlog": self.ui.backlogContainer,
-            "In Progress": self.ui.inProgressContainer,
-            "Blocked": self.ui.blockedContainer,
-            "Done": self.ui.doneContainer,
-        }
-        for status, container in self.columnContainers.items():
-            container.setAcceptDrops(True)
-            container.dragEnterEvent = self.create_dragEnterEvent()
-            container.dropEvent = self.create_dropEvent(status)
-
-        self.ui.addTaskButton.clicked.connect(self.add_task)
-        self.ui.archiveButton.clicked.connect(self.open_archive)
         self.ui.themeToggleButton.clicked.connect(self.toggle_theme)
-
         self.apply_theme()
-        self.load_tasks()
+
+        self.setMinimumSize(config.DEFAULT_WINDOW_WIDTH, config.DEFAULT_WINDOW_HEIGHT)
+
+    def select_tab(self, idx):
+        # отметить кнопки
+        for btn in (self.ui.tabToday, self.ui.tabBoard, self.ui.tabHabits):
+            btn.setChecked(False)
+        {0: self.ui.tabToday, 1: self.ui.tabBoard, 2: self.ui.tabHabits}[idx].setChecked(True)
+        # показать страницу
+        self.stacked.setCurrentIndex(idx)
+
+        if idx == 0:  # Today
+            self.today_controller.load_today_habits()
+        elif idx == 1:  # Board
+            self.board.load_tasks()
+        elif idx == 2:  # Habits
+            self.habits_controller.load_habits()
 
     def closeEvent(self, event):
         self.settings.setValue("MainWindow/geometry", self.saveGeometry())
         super().closeEvent(event)
 
-    def create_dragEnterEvent(self):
-        def dragEnterEvent(event):
-            if event.mimeData().hasFormat("application/x-task-id"):
-                event.acceptProposedAction()
-
-        return dragEnterEvent
-
-    def create_dropEvent(self, target_status):
-        def dropEvent(event):
-            data = event.mimeData().data("application/x-task-id")
-            try:
-                task_id = int(data.data().decode())
-            except Exception:
-                return
-            update_task(task_id, status=target_status)
-            self.load_tasks()
-            event.acceptProposedAction()
-
-        return dropEvent
-
     def apply_theme(self):
-        if getattr(sys, "frozen", False):
-            base_path = sys._MEIPASS
-        else:
-            base_path = os.path.dirname(os.path.abspath(__file__))
-        theme_path = os.path.join(base_path, config.THEMES[self.current_theme])
-        with open(theme_path, "r", encoding="utf-8") as f:
-            self.setStyleSheet(f.read())
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        with open(os.path.join(base_path, "app/styles/base.qss"), encoding="utf-8") as f:
+            base = f.read()
+        theme_file = "style_light.qss" if self.current_theme == "light" else "style_dark.qss"
+        with open(os.path.join(base_path, f"app/styles/{theme_file}"), encoding="utf-8") as f:
+            theme = f.read()
+        # объединяем
+        self.setStyleSheet(base + "\n" + theme)
 
     def toggle_theme(self):
         self.current_theme = "dark" if self.current_theme == "light" else "light"
         config.save_user_theme(self.current_theme)
         self.apply_theme()
-        self.load_tasks()
-
-    def clear_columns(self):
-        for layout in self.columns.values():
-            while layout.count():
-                item = layout.takeAt(0)
-                widget = item.widget()
-                if widget:
-                    widget.deleteLater()
-
-    def load_tasks(self):
-        self.clear_columns()
-        selected_priorities = []
-        if self.ui.lowPriorityCheckBox.isChecked():
-            selected_priorities.append("Low")
-        if self.ui.mediumPriorityCheckBox.isChecked():
-            selected_priorities.append("Medium")
-        if self.ui.highPriorityCheckBox.isChecked():
-            selected_priorities.append("High")
-        if not selected_priorities:
-            selected_priorities = ["Low", "Medium", "High"]
-
-        columns_tasks = {"Backlog": [], "In Progress": [], "Blocked": [], "Done": []}
-        for task in get_active_tasks():
-            if task[3] not in selected_priorities:
-                continue
-            widget = TaskCard(
-                task,
-                theme=self.current_theme,
-                on_delete=self.confirm_delete,
-                on_archive=self.archive_task,
-                on_edit=self.edit_task,
-                on_view=lambda t: TaskDetailDialog(t, self).exec(),
-            )
-            columns_tasks[task[4]].append(widget)
-
-        for status, widgets in columns_tasks.items():
-            layout = self.columns[status]
-            for widget in widgets:
-                layout.addWidget(widget)
-            layout.addStretch()
-
-    def confirm_delete(self, task):
-        confirm = QtWidgets.QMessageBox.question(
-            self,
-            "Confirm Delete",
-            f"Are you sure you want to delete '{task[1]}'?",
-            QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No,
-        )
-        if confirm == QtWidgets.QMessageBox.StandardButton.Yes:
-            delete_task(task[0])
-            self.load_tasks()
-
-    def archive_task(self, task):
-        archive_task(task[0])
-        self.load_tasks()
-
-    def add_task(self):
-        dialog = TaskDialog(self)
-        if dialog.exec():
-            data = dialog.get_data()
-            add_task(**data, sort_index=0)
-            self.load_tasks()
-
-    def edit_task(self, task):
-        dialog = TaskDialog(self, task=task)
-        if dialog.exec():
-            data = dialog.get_data()
-            update_task(task[0], **data)
-            self.load_tasks()
+        self.board.load_tasks()
 
     def open_archive(self):
         dialog = ArchiveDialog(self)

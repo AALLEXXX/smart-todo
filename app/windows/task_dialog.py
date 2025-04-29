@@ -1,5 +1,6 @@
 from PyQt6 import QtCore
 from PyQt6 import QtWidgets
+from PyQt6.QtWidgets import QMessageBox
 
 from app.ui.ui_TaskDialog import Ui_TaskDialog
 from app.utils import format_deadline
@@ -12,7 +13,7 @@ class TaskDialog(PersistentDialog):
         self.ui = Ui_TaskDialog()
         self.ui.setupUi(self)
         self.task = task
-        self.ui.saveButton.clicked.connect(self.accept)
+        self.ui.saveButton.clicked.connect(self._on_save)
         self.ui.cancelButton.clicked.connect(self.reject)
         self.ui.dueDateEdit.setDate(QtCore.QDate.currentDate())
         if task:
@@ -22,6 +23,14 @@ class TaskDialog(PersistentDialog):
             self.ui.statusCombo.setCurrentText(task[4])
             self.ui.dueDateEdit.setDate(QtCore.QDate.fromString(task[6], "yyyy-MM-dd"))
             self.ui.createdDateLabel.setText(f"Created: {task[5][:10]}")
+
+    def _on_save(self):
+        title = self.ui.titleEdit.text().strip()
+        if not title:
+            QMessageBox.warning(self, "Error", "Title cannot be empty.")
+            return
+        # все ок
+        self.accept()
 
     def get_data(self):
         return {
