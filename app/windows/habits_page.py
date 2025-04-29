@@ -14,6 +14,7 @@ from app.db import get_habits
 from app.ui.ui_HabitCard import Ui_HabitCard
 from app.ui.ui_HabitDialog import Ui_HabitDialog
 from app.ui.ui_HabitsPage import Ui_HabitsPage
+from app.windows.habit_detail_dialog import HabitDetailDialog
 
 
 def _parse_date(date_str: str):
@@ -70,6 +71,7 @@ class HabitsPageController:
 
     def _create_card(self, record, year) -> QtWidgets.QFrame:
         card_frame = QtWidgets.QFrame()
+        card_frame.setCursor(Qt.CursorShape.PointingHandCursor)
         ui_card = Ui_HabitCard()
         ui_card.setupUi(card_frame)
 
@@ -92,6 +94,8 @@ class HabitsPageController:
             self._attach_calendar_with_buttons(ui_card, calendar)
         else:
             ui_card.calendarWidget.layout().addWidget(calendar)
+
+        card_frame.mouseDoubleClickEvent = lambda ev, hid=record[0]: self.open_detail(hid)
 
         return card_frame
 
@@ -186,3 +190,8 @@ class HabitsPageController:
         add_habit(title, reward, start, end, freq, hard, items)
         dlg.accept()
         self.load_habits()
+
+    def open_detail(self, habit_id: int):
+        dlg = HabitDetailDialog(habit_id, self.parent)
+        dlg.setMinimumSize(450, 450)
+        dlg.exec()

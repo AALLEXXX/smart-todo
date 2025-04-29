@@ -9,6 +9,7 @@ install-dev:
 
 compile-ui:
 	poetry run python app/ui_uploader.py
+	make lint
 
 init-db:
 	poetry run python app/data/init_db.py
