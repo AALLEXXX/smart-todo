@@ -39,10 +39,16 @@ Clone the repo and install dependencies:
 make install-dev    # install with dev dependencies + pre‑commit hooks
 ```
 
-Set up the database and demo data (Dev mode only):
+Set up the database:
 
 ```bash
-make init-db        # initialize SQLite and insert demo hard habit + sample tasks
+make init-db        # initialize SQLite
+```
+
+Set up the database and demo data:
+
+```bash
+make init-db-dev
 ```
 
 Compile all Qt `.ui` files:
