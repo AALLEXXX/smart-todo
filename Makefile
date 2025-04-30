@@ -12,10 +12,11 @@ compile-ui:
 	make lint
 
 init-db:
+	-rm app/data/todo.db
 	poetry run python app/data/init_db.py
 
 init-db-dev:
-#     rm app/data/todo.db
+	-rm app/data/todo.db
 	poetry run python app/data/init_db.py
 	poetry run python app/data/init_data.py
 
@@ -52,9 +53,9 @@ build:
 
 build-dmg-clean:
 	@rm -rf "dist/AlexTodo.dmg"
+	@rm -rf dist/dmg
 	@mkdir -p dist/dmg
 	@cp -R "dist/AlexTodo.app" dist/dmg/
-	@ln -s /Applications dist/dmg/Applications
 	create-dmg \
 	  --volname "AlexTodo" \
 	  --window-size 500 300 \
@@ -68,3 +69,4 @@ build-dmg-clean:
 
 clean:
 	rm -rf build dist *.spec
+	hdiutil detach /Volumes/AlexTodo 2>/dev/null || true
