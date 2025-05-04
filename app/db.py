@@ -24,7 +24,7 @@ def get_connection():
 def get_active_tasks():
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM tasks WHERE is_archived = 0 ORDER BY status, sort_index")
+        cursor.execute("SELECT * FROM tasks WHERE is_archived = 0 ORDER BY status")
         return cursor.fetchall()
 
 
@@ -35,13 +35,13 @@ def get_archived_tasks():
         return cursor.fetchall()
 
 
-def add_task(title, description, priority, status, due_date, sort_index):
+def add_task(title, description, priority, status, due_date):
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO tasks (title, description, priority, status, created_at, due_date, sort_index, is_archived) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, 0)",
-            (title, description, priority, status, datetime.now().isoformat(), due_date, sort_index),
+            "INSERT INTO tasks (title, description, priority, status, created_at, due_date, is_archived) "
+            "VALUES (?, ?, ?, ?, ?, ?, 0)",
+            (title, description, priority, status, datetime.now().isoformat(), due_date),
         )
         conn.commit()
 
@@ -143,7 +143,9 @@ def get_habit_logs(habit_id: int, year: int = None):
 def get_habit_items(habit_id: int):
     with get_connection() as conn:
         cur = conn.cursor()
-        cur.execute("SELECT id, description FROM habit_items WHERE habit_id=? ORDER BY sort_index", (habit_id,))
+        cur.execute(
+            "SELECT id, description, sort_index FROM habit_items WHERE habit_id=? ORDER BY sort_index", (habit_id,)
+        )
         return cur.fetchall()
 
 
@@ -254,3 +256,118 @@ def evaluate_hard_habits():
             cur.execute("UPDATE habits SET is_failed=1 WHERE id=?", (hid,))
 
     conn.commit()
+
+
+def clear_all_user_data(conn=None):
+    own_conn = False
+    if conn is None:
+        conn = get_connection()
+        own_conn = True
+    cur = conn.cursor()
+    for tbl in ["tasks", "habits", "habit_items", "habit_logs", "habit_item_logs", "tags", "habit_tags"]:
+        cur.execute(f"DELETE FROM {tbl}")
+    if own_conn:
+        conn.commit()
+
+
+def insert_tag(id: int, name: str, conn=None):
+    own_conn = False
+    if conn is None:
+        conn = get_connection()
+        own_conn = True
+    cur = conn.cursor()
+    cur.execute("INSERT INTO tags (id, name) VALUES (?, ?)", (id, name))
+    if own_conn:
+        conn.commit()
+
+
+def insert_task_full(
+    id, title, description, priority, status, created_at, due_date, completed_at, is_archived, conn=None
+):
+    own_conn = False
+    if conn is None:
+        conn = get_connection()
+        own_conn = True
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO tasks (id, title, description, priority, status, created_at, due_date, completed_at, is_archived) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        (id, title, description, priority, status, created_at, due_date, completed_at, is_archived),
+    )
+    if own_conn:
+        conn.commit()
+
+
+def insert_habit_full(id, title, reward, start_date, end_date, frequency, hard_mode, is_failed, created_at, conn=None):
+    own_conn = False
+    if conn is None:
+        conn = get_connection()
+        own_conn = True
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO habits (id, title, reward, start_date, end_date, frequency, hard_mode, is_failed, created_at) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        (id, title, reward, start_date, end_date, frequency, hard_mode, is_failed, created_at),
+    )
+    if own_conn:
+        conn.commit()
+
+
+def insert_habit_item_full(id, habit_id, description, sort_index, conn=None):
+    own_conn = False
+    if conn is None:
+        conn = get_connection()
+        own_conn = True
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO habit_items (id, habit_id, description, sort_index) VALUES (?, ?, ?, ?)",
+        (id, habit_id, description, sort_index),
+    )
+    if own_conn:
+        conn.commit()
+
+
+def insert_habit_log_full(habit_id, log_date, completed, conn=None):
+    own_conn = False
+    if conn is None:
+        conn = get_connection()
+        own_conn = True
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO habit_logs (habit_id, log_date, completed) VALUES (?, ?, ?)", (habit_id, log_date, completed)
+    )
+    if own_conn:
+        conn.commit()
+
+
+def insert_habit_item_log_full(habit_id, item_id, log_date, completed, conn=None):
+    own_conn = False
+    if conn is None:
+        conn = get_connection()
+        own_conn = True
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO habit_item_logs (habit_id, item_id, log_date, completed) VALUES (?, ?, ?, ?)",
+        (habit_id, item_id, log_date, completed),
+    )
+    if own_conn:
+        conn.commit()
+
+
+def insert_habit_tag(habit_id, tag_id, conn=None):
+    own_conn = False
+    if conn is None:
+        conn = get_connection()
+        own_conn = True
+    cur = conn.cursor()
+    cur.execute("INSERT INTO habit_tags (habit_id, tag_id) VALUES (?, ?)", (habit_id, tag_id))
+    if own_conn:
+        conn.commit()
+
+
+def get_tag_id_by_name(name: str):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id FROM tags WHERE name=?", (name,))
+    row = cur.fetchone()
+    return row[0] if row else None
