@@ -47,6 +47,13 @@
           </widget>
         </item>
         <item>
+          <widget class="QPushButton" name="settingsButton">
+            <property name="toolTip">
+              <string>Settings</string>
+            </property>
+          </widget>
+        </item>
+        <item>
           <widget class="QPushButton" name="themeToggleButton">
             <property name="text"><string>🌙</string></property>
           </widget>
@@ -68,7 +75,6 @@
     </widget>
   </item>
 
-    <!-- 2) Растягивающийся spacer, чтобы кнопка оказалась справа -->
   <item>
     <widget class="QStackedWidget" name="stackedWidget">
       <widget class="QWidget" name="today_page"/>

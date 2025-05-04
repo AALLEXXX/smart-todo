@@ -11,3 +11,7 @@ build/
 *.spec
 
 *.ini
+
+prompt.txt
+
+user_config.ini

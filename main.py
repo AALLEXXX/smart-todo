@@ -3,21 +3,22 @@ import sys
 
 from PyQt6 import QtCore
 from PyQt6 import QtWidgets
+from PyQt6.QtGui import QIcon
 
-import config
+from app import config
 from app.db import evaluate_hard_habits
 from app.ui.ui_BoardPage import Ui_BoardPage
 from app.ui.ui_MainWindow import Ui_MainWindow
 from app.windows.archive_dialog import ArchiveDialog
 from app.windows.board_window import BoardController
 from app.windows.habits_page import HabitsPageController
+from app.windows.settings_dialog import SettingsDialog
 from app.windows.today_page import TodayPageController
 
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
-
         evaluate_hard_habits()
 
         self.settings = QtCore.QSettings(config.USER_CONFIG_PATH, QtCore.QSettings.Format.IniFormat)
@@ -27,6 +28,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.current_theme = config.load_user_theme()
+
+        self.set_settings_icon()
+        self.ui.settingsButton.clicked.connect(self.open_settings)
 
         try:
             version = config.VERSION
@@ -40,7 +45,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.board_ui.setupUi(self.ui.board_page)
 
         self.stacked = self.ui.stackedWidget
-        self.current_theme = config.load_user_theme()
         self.board = BoardController(self.ui.board_page, self)
         self.habits_controller = HabitsPageController(self.ui.habits_page, self)
 
@@ -53,6 +57,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.apply_theme()
 
         self.setMinimumSize(config.DEFAULT_WINDOW_WIDTH, config.DEFAULT_WINDOW_HEIGHT)
+
+    def open_settings(self):
+        dialog = SettingsDialog(self)
+        dialog.exec()
 
     def select_tab(self, idx):
         # отметить кнопки
@@ -88,6 +96,27 @@ class MainWindow(QtWidgets.QMainWindow):
         config.save_user_theme(self.current_theme)
         self.apply_theme()
         self.board.load_tasks()
+
+        # update settings icon according to new theme
+        self.set_settings_icon()
+
+    def set_settings_icon(self):
+        icon = QIcon.fromTheme("settings")
+        if icon.isNull():
+            if self.current_theme == "light":
+                icon_path = os.path.join(
+                    os.path.dirname(os.path.abspath(__file__)), "app", "icons", "settings_light.png"
+                )
+            else:
+                icon_path = os.path.join(
+                    os.path.dirname(os.path.abspath(__file__)), "app", "icons", "settings_dark.png"
+                )
+            icon = QIcon(icon_path)
+        self.ui.settingsButton.setIcon(icon)
+        _btn_size = self.ui.settingsButton.sizeHint()
+        self.ui.settingsButton.setIcon(icon)
+        self.ui.settingsButton.setIconSize(QtCore.QSize(25, 25))
+        self.ui.settingsButton.setFixedSize(_btn_size)
 
     def open_archive(self):
         dialog = ArchiveDialog(self)

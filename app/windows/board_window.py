@@ -2,7 +2,7 @@ from datetime import datetime
 
 from PyQt6 import QtWidgets
 
-import config
+from app import config
 from app.components.task_card import TaskCard
 from app.db import add_task
 from app.db import archive_task
@@ -154,7 +154,7 @@ class BoardController:
         dlg = TaskDialog(self.parent)
         if dlg.exec():
             data = dlg.get_data()
-            add_task(**data, sort_index=0)
+            add_task(**data)
             self.load_tasks()
 
     def edit_task(self, task):

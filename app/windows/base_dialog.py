@@ -1,7 +1,7 @@
 from PyQt6 import QtCore
 from PyQt6 import QtWidgets
 
-import config
+from app import config
 
 
 class PersistentDialog(QtWidgets.QDialog):
