@@ -52,3 +52,5 @@ CARD_HEIGHT = 200
 BUILD_MODE = "dev"
 
 VERSION = "v0.0.2"
+
+DB_PATH = "app/data/todo.db"

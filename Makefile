@@ -13,7 +13,7 @@ compile-ui:
 
 init-db:
 	-rm app/data/todo.db
-	poetry run python app/data/init_db.py
+	poetry run python -m app.data.init_db
 
 init-db-dev:
 	-rm app/data/todo.db
@@ -26,6 +26,9 @@ run:
 lint:
 	poetry run ruff format .
 	poetry run ruff check . --fix
+
+gen-gpt:
+	poetry run python prompt_generator.py
 
 build-prod-mac: clean build build-dmg-clean
 
