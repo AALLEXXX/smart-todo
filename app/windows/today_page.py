@@ -85,7 +85,7 @@ class TodayPageController:
 
         items = get_habit_items(habit_id)  # now returns list of (item_id, description)
         item_logs = get_habit_item_logs(habit_id, date.today())
-        for item_id, desc in items:
+        for item_id, desc, _ in items:
             chk = QCheckBox(desc)
             is_done = item_logs.get(item_id, False)
             chk.setChecked(is_done)
@@ -104,7 +104,7 @@ class TodayPageController:
         # проверяем, все ли пункты сегодня выполнены
         items = get_habit_items(habit_id)
         logs = get_habit_item_logs(habit_id, date.today())
-        all_done = all(logs.get(iid, False) for iid, _ in items)
+        all_done = all(logs.get(iid, False) for iid, _, _ in items)
 
         # обновляем общий лог привычки
         update_habit_log(habit_id, date.today(), all_done)

@@ -2,14 +2,14 @@ import os
 
 from PyQt6 import QtCore
 
-# Идентификаторы для QSettings (подходят для сборки exe)
+VERSION = "v0.3.0"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 APP_NAME = "Todo"
-ORGANIZATION = "MyCompany"
+ORGANIZATION = "Alex"
 
 # Темы оформления: пути к qss-файлам
-THEMES = {"light": os.path.join("app/styles", "style_light.qss"), "dark": os.path.join("app/styles", "style_dark.qss")}
+THEMES = {"light": os.path.join("styles", "style_light.qss"), "dark": os.path.join("styles", "style_dark.qss")}
 
 USER_CONFIG_PATH = os.path.join(BASE_DIR, "user_config.ini")
 
@@ -50,7 +50,5 @@ CARD_WIDTH = 350
 CARD_HEIGHT = 200
 
 BUILD_MODE = "dev"
-
-VERSION = "v0.0.2"
 
 DB_PATH = "app/data/todo.db"

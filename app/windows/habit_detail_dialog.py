@@ -68,7 +68,7 @@ class HabitDetailDialog(QDialog):
         # 5) пункты и их состояние
         items = get_habit_items(self.habit_id)  # [(item_id, desc), ...]
         item_logs = get_habit_item_logs(self.habit_id, date.today())
-        for item_id, desc in items:
+        for item_id, desc, _ in items:
             done = item_logs.get(item_id, False)
             lbl = QLabel(f"[{'✔' if done else ' '}] {desc}")
             self.ui.itemsLayout.addWidget(lbl)

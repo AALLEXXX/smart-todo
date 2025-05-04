@@ -1,7 +1,9 @@
 import os
 import sqlite3
 
-DB_PATH = "app/data/todo.db"
+from app import config
+
+DB_PATH = config.DB_PATH
 
 
 def init_db():
@@ -25,7 +27,6 @@ def init_db():
             created_at TEXT NOT NULL,
             due_date TEXT,
             completed_at TEXT,
-            sort_index INTEGER NOT NULL DEFAULT 0,
             is_archived INTEGER NOT NULL DEFAULT 0
         )
     """
